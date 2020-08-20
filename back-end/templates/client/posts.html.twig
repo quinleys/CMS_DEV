@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+
+<div class="card my-3">
+<div class="card-body">
+
+   <h4> Alle werkbonnen </h4>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Taak</th>
+      <th scope="col">Datum</th>
+      <th scope="col">Uren gewerkt</th>
+      <th scope="col">Werknemer</th>
+       <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for post in posts %}
+      <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{ post.title }}</td>
+      <td>{{post.date|date('Y-m-d') }}</td>
+      <td>{{post.start}} - {{post.stop}}</td>
+       <td>{{post.getUser().getFirstName}} {{post.getUser().getLastName}}</td>
+      <td><a class="btn btn-primary" href="/client/posts/{{post.id}}">Bekijk</a> </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+{% endblock %}

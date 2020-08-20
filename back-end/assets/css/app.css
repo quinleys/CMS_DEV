@@ -1,0 +1,33 @@
+body {
+    background-color: #0f0f11 !important;
+    color: white;
+}
+.navbar-dark, .navbar-nav, .nav-link, .card,.navbar,.navbar-expand-lg{
+    color: white;
+    background-color: #18181b ;
+  }
+
+.btn-primary{
+    background-color:  #9147ff!important;
+    border: none;
+}
+.card{
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.46);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.46);
+}
+
+.table {
+    color:white;
+}
+hr {
+    background-color: white;
+    color: white;
+}
+/* #9147ff
+
+#0f0f11
+
+#3a3a3d
+
+#18191d */

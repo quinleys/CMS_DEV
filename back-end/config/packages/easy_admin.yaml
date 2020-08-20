@@ -1,0 +1,197 @@
+easy_admin:
+  site_name: 'CMS-DEV'
+  design:
+    brand_color: '#9147ff'
+    assets:
+      css:
+        - 'css/admin.css'
+    menu:
+      - label: "Customer"
+        children:
+          - {entity: Customer, label: "Customer List", icon: "th-list" }
+          - {entity: Customer, label: "Add Customer", icon: "plus", params: {action: new}}
+      - label: "Post"
+        children:
+          - {entity: Post, label: "Post List", icon: "th-list" }
+          - {entity: Post, label: "Add Post", icon: "plus", params: {action: new}}
+      - label: "Material"
+        children:
+          - {entity: Material, label: "Material List", icon: "th-list" }
+          - {entity: Material, label: "Add Material", icon: "plus", params: {action: new}}
+      - label: "Period"
+        children:
+          - { entity: Period, label: "Period List", icon: "th-list" }
+          - { entity: Period, label: "Add Period", icon: "plus", params: {action: new}}
+      - label: "Complaint"
+        children:
+          - {entity: Complaint, label: "Complaint List", icon: "th-list" }
+          - {entity: Complaint, label: "Add Complaint", icon: "plus", params: {action: new}}
+      - {label: "Users" }
+      - {entity: User, icon: "user" }
+     
+  entities:
+
+    Post:
+      class: App\Entity\Post
+      controller: App\Controller\AdminController
+      label: "Post"
+      list:
+        fields: ['id', 'title','start','stop','date','customer', 'period']
+        collapse_actions: true
+        actions: ['show','edit','delete']
+        batch_actions: ['delete']
+      form:
+        fields:
+          - {type: "group", icon: "pencil", label: "Basic information", css_class: "col-lg-7"}
+          - title
+          - transport
+          - pauze
+          - finished
+          - materials
+          - date
+          - {property: 'start', type: 'time'}
+          - {property: 'stop', type: 'time'}
+          - description
+          - {type: "group", icon: "th-list", label: "Customer Info & User ", css_class: "col-lg-5"}
+          - customer
+          - period
+          - user
+        list:
+        edit:
+          - {type: "group", icon: "pencil", label: "Basic information", css_class: "col-lg-7"}
+          - title
+          - transport
+          - pauze
+          - finished
+          - materials
+          - date
+          - {property: 'start'}
+          - {property: 'stop'}
+          - description
+          - {type: "group", icon: "th-list", label: "Customer Info & User ", css_class: "col-lg-5"}
+          - customer
+          - period
+          - user
+        show:
+          fields:
+            - title
+            - {property: description, type: 'raw'}
+            - transport
+            - materials
+            - customer
+            - date
+            - start
+            - stop
+            - finished
+            - pauze
+    Material:
+      class: App\Entity\Material
+      controller: App\Controller\AdminController
+      label: "Material"
+      list: 
+        fields: ["id","name","description","posts"]
+        collapse_actions: true
+        actions: ['show','edit','delete']
+        batch_actions: ['delete']
+      form:
+        fields:
+          - name
+          - description
+      show:
+        fields:
+          - name
+          - description
+    Customer:
+      class: App\Entity\Customer
+      controller: App\Controller\AdminController
+      label: "Customer"
+      list:
+        fields: ["id","name","description","email","phone","adress"]
+        collapse_actions: true
+        actions: ['show','edit','delete']
+        batch_actions: ['delete']
+      form:
+        fields:
+          - name
+          - description
+          - email
+          - phone
+          - adress
+      show:
+        fields:
+          - name
+          - description
+          - email
+          - phone
+          - adress
+          - periods
+    Period:
+      class: App\Entity\Period
+      controller: App\Controller\AdminController
+      label: "Period"         
+      show:
+        actions:
+          -
+            name: 'calculate'
+            icon: 'calculator'
+            type: 'route'
+            css_class: 'btn btn-primary'
+          -
+            name: 'mail'
+            icon: 'envelope'
+            type: 'route'
+            css_class: 'btn btn-primary'
+      list:
+        fields: ["id","title","customer","startDate","endDate","isConfirmed","posts"]
+        collapse_actions: true
+        actions: 
+          - { name: 'show' }
+          - { name: 'edit' }
+          - { name: 'delete'}
+        batch_actions: ['delete']
+      form:
+        fields:
+          - {type: "group", icon: "pencil", label: "Basic information", css_class: "col-lg-7"}
+          - title
+          - customer
+          - startDate
+          - endDate
+    Complaint:
+      class: App\Entity\Complaint
+      controller: App\Controller\AdminController
+      label: "Complaint"
+      list:
+        filelds: ["id", "period", "customer", "title", "description"]
+        collapse_actions: true
+        actions: ['show','edit','delete']
+        batch_actions: ['delete']
+    User:
+      class: App\Entity\User
+      controller: App\Controller\AdminController
+      label: "User"
+      list:
+        fields: ['id', 'username','email','posts','roles','uurtarief','transportkost','customer']
+        collapse_actions: true
+        actions: ['show','edit','delete']
+        batch_actions: ['delete']
+      form:
+        fields:
+          - {type: "group", icon: "pencil", label: "Basic information", css_class: "col-lg-7"}
+          - username
+          - email
+          - password
+          - uurtarief
+          - transportkost 
+          - customer
+          - property: 'roles'
+            type: 'choice'
+            type_options:
+              multiple: true
+              choices: { 'Normal user': 'ROLE_USER', 'Administrator': 'ROLE_ADMIN', 'Onderaannemer': 'ROLE_ONDERAANNEMER', 'Klant': 'ROLE_CLIENT'}
+
+          
+          
+
+        
+
+ 

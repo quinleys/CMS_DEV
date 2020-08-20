@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="row my-3">
+<div class="col">
+<h1>Periode</h1>
+</div>
+<div class="col my-auto text-right p-0">
+ {% if period.isConfirmed  == false %}
+<a class="btn btn-primary mx-2 "  href="{{path('set_active', {id:period.id}) }}">Goedkeuren</a>
+ {% endif %}
+<a class="btn btn-primary mx-2" href="/client/periods/{{period.id}}/complaint" role="button">Fout melden</a>
+<a class="btn btn-primary mx-2" href="{{ path('download_pdf', {id: period.id}) }}" role="button">Exporten</a>
+</div>
+<div class="row">
+<div class="col-lg-4">
+<div class="card my-3">
+<div class="card-body">
+<h2>Periode informatie</h2>
+<p>Naam:  {{ period.title }}</p>
+<p>Start datum:  {{ period.startDate|date('Y-m-d') }}</p>
+<p>Eind datum:  {{ period.endDate|date('Y-m-d') }}</p>
+<h6>Klanten informatie</h6>
+<p>Klant: {{ period.getCustomer().name }} </p>
+<p>Klanten adres: {{ period.getCustomer().adress }} </p>
+<p>Klanten telefoon: {{ period.getCustomer().phone }} </p>
+<h6>Periode informatie</h6>
+<p>Aantal uitgevoerde opdracht: {{period.getPosts().count()}} </p>
+<p>Totaal aantal gepresteerde uren: {{timeworked|date('H')}} uren {{timeworked|date('i')}} minuten {{timeworked|date('s')}} seconden </p>
+<p>Prijs voor gepresteerde uren: {{totalprice}} </p>
+<p>Totaal aantal kilometers: {{totalKm}} </p>
+<p>Prijs voor kilometers: {{totalpricekm}} </p>
+ <hr style="color: FFF"/>
+<h4>Totale Prijs </h4>
+<h4>{{priceToPay}}</h4>
+</div>
+</div>
+</div>
+
+<div class="col-lg-8">
+<div class="card my-3">
+<div class="card-body">
+<h2>Taken overview</h2>
+<table class="table">
+ <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Taak</th>
+      <th scope="col">Start</th>
+      <th scope="col">Stop</th>
+      <th scope="col">Materialen</th>
+      <th scope="col">Acties</th>
+    </tr>
+  </thead>
+    <tbody>
+  {% for post in posts %}
+
+    <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{post.title}}</td>
+      <td> {{post.start}} </td>
+      <td> {{post.stop}} </td>
+      <td>
+
+       {% if post.materials.count() == 0 %}
+    Geen materialen
+        {% else %}
+       {% for mat in post.materials %}  
+      
+      {{ mat.name }} 
+      
+      {% endfor %} 
+    {% endif %}
+    </td>
+   <td> <a class="btn btn-primary" href="/client/posts/{{post.id}}">Bekijk</a> </td>
+    </tr>
+     {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+<div class="card my-4">
+<div class="card-body">
+<h2>Fouten overview</h2>
+<table class="table">
+ <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Fout</th>
+      <th scope="col">Descriptie</th>
+      <th scope="col">Opgelost</th>
+    </tr>
+  </thead>
+    <tbody>
+  {% for complaint in complaints %}
+
+    <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{complaint.title}}</td>
+      <td> {{complaint.description}} </td>
+      <td> {% if complaint.isFixed == 1 %} Opgelost {% elseif complaint.isFixed == 0 %} Nog niet opgelost {% endif %} </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+{% endblock %}

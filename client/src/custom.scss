@@ -1,0 +1,141 @@
+@import '~bootstrap/scss/bootstrap.scss';
+
+$primary: #9147ff!important;
+$background: #0f0f11 !important;
+$second : #18181b !important;
+$third: #3a3a3d !important;
+
+body {
+    background-color: $background;
+    color: white !important;
+    
+}
+#root {
+    min-height: 100vh;
+}
+.navbar-dark, .navbar-nav, .nav-link, .card,.navbar,.navbar-expand-lg{
+    color: white;
+    background-color: $second ;
+  }
+
+.btn-primary, .btn-dark{
+    background-color:  $primary;
+    border: none;
+}
+.MuiSwitch-colorSecondary,.Mui-checked, .MuiSwitch-colorSecondary, Mui-checked , .MuiSwitch-track {
+    color: $primary ;
+}
+.Mui-checked + .MuiSwitch-track{
+    background-color: $primary;
+}
+.MuiCard-root{
+    background-color: $second ;
+    color: white;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.46);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.46);
+}
+.MuiPaper-root{
+    /* color: white !important; */
+}
+.MuiTypography-colorTextSecondary{
+    color: #ADADB8 !important;
+}
+.MuiFab-secondary{
+    background-color: $primary ;
+}
+.MuiChip-root {
+    background-color: $third ;
+    color: white !important;
+}
+.fab{
+    position: fixed !important;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+}
+
+.MuiButton-contained {
+    background-color: $primary;
+    color: $white ;
+}
+
+.modal-content{
+    background-color: $second;
+}
+
+.form-control,.css-yk16xz-control, .css-yk16xz-control ,  .css-2b097c-container, .css-2b097c-container{
+    background-color: $third ;
+    border: none;
+    color: white;
+}
+
+.form-control:focus,  css-g1d714-ValueContainer{
+    background-color: $background;
+    color:white;
+    border: none;
+    border: 1px solid $primary
+}
+.modal-header{
+    span {
+        color: white;
+    }
+}
+
+.page-item,.page-link {
+    
+    background-color: $second;
+    color: white;
+    border: 1px solid $second;
+}
+
+.active{
+    background-color: $primary;
+    border: 1px solid $primary;
+}
+
+.navbar{
+    a{
+        color: $primary;
+    }
+}
+
+.nav-link, .nav-item{
+    color: $primary
+}
+.MuiToolbar-root{
+    background-color: $third;
+    color: white;
+}
+.MuiCardContent-root{
+    color: white;
+}
+
+.Cell-highlightedText-38{
+    color: $primary
+}
+
+.MuiList-root {
+    background-color: $second;
+    a {
+        color: $primary;
+    }
+    li {
+        color: white
+    }
+}
+
+.css-26l3qy-menu{
+    color: black !important;
+}
+
+.page-item .active {
+    .page-link {
+        color: $primary;
+        background-color: $primary;
+    }
+
+}
+.page-link:hover {
+    color: $primary;
+}

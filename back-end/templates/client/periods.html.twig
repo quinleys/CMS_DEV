@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+
+<div class="card my-3">
+<div class="card-body">
+
+   <h4> Alle Periodes </h4>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Periodes</th>
+      <th scope="col">Datum</th>
+      <th scope="col">Aantal taken</th>
+      <th scope="col">Goedgekeurd</th>
+       <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+{% for period in periods %}
+      <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{ period.title }}</td>
+      <td>{{period.startDate|date('Y-m-d') }} - {{period.endDate|date('Y-m-d') }}</td>
+      <td>{{ period.getPosts().count()}} </td>
+       <td>{% if period.isConfirmed == 1 %} Ja {% else %} Nee {% endif %}</td>
+      <td><a class="btn btn-primary" href="/client/periods/{{period.id}}">Bekijk</a> </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+{% endblock %}

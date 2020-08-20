@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div class="card my-4">
+  <div class="card-body">
+    <h1 class="card-title text-center">Taak</h1>
+    <hr/>
+    <p>Taak: <strong> {{ post.title }} </strong> </p>
+    <p>Klaar: <strong> {% if post.finished  == 0 %} Neen {% else %} {{ post.finished }} {% endif %}</strong> </p>
+    <p> Werknemer: <strong>{{post.getUser().getFirstName() }} {{post.getUser().getLastName() }} </strong> </p>
+    <p>Periode: {% if post.period == null %}  <strong> Geen periode  </strong>  {% else %}  <strong>  {{ post.period }}  </strong>  {% endif %} </p>
+    <p>Omschrijving:  <strong>  {{ post.description }} </strong>  </p>
+    <p> Datum:  <strong>  {{ post.date|date('Y-m-d') }}  </strong>  </p>
+    <p> Uren: <strong>  {{ post.start }} - {{ post.stop }}  </strong>  </p>
+    <p> Materialen:        {% if post.materials.count() == 0 %}
+    <strong>   Geen materialen  </strong> 
+        {% else %}
+       {% for mat in post.materials %}  
+      
+    <strong>    {{ mat.name }}  </strong> 
+      
+      {% endfor %} 
+    {% endif %}
+    </p>
+    <p> Pauze: <strong>  {{ post.pauze }}  </strong>  </p>
+    <p> Aantal km:  <strong>  {{ post.transport }}  km</strong>  </p>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+
+{% form_theme complaint_form 'bootstrap_4_layout.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="card my-3">
+<div class="card-body">
+<h1> Fout verwerking </h1>
+{{ form_start(complaint_form) }}
+{{ form(complaint_form) }}
+{{ form_end(complaint_form) }}
+</div>
+</div>
+{% endblock %}

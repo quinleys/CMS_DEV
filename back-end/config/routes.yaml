@@ -1,0 +1,39 @@
+index:
+    path: /client
+    controller: App\Controller\ClientController::client
+posts:
+    path: /client/posts
+    controller: App\Controller\ClientController::posts
+post_detail:
+    path: /client/posts/{id}
+    controller: App\Controller\ClientController::post
+home: 
+    path: /
+    controller: App\Controller\PageController:home
+periods:
+    path: /client/periods
+    controller: App\Controller\ClientController::periods
+detail:
+    path: /client/periods/{id}
+    controller: App\Controller\ClientController::show
+complaint:
+    path: /client/periods/{id}/complaint
+    controller: App\Controller\ClientController::complaint
+download_pdf:
+    path: /client/period/{id}/download
+    controller: App\Controller\ClientController::pdf
+download_pdf_admin:
+    path: /backend/period/{id}/download
+    controller: App\Controller\AdminController::pdfAction
+set_active:
+    path: /client/period/{id}/active
+    controller: App\Controller\ClientController::setActive
+calculate:
+    path: /backend/{id}/calculate
+    controller: App\Controller\AdminController::calculateAction
+mail:
+    path: /backend/{id}/mail
+    controller: App\Controller\AdminController::mailAction
+download_excel_admin:
+    path: /backend/{id}/excel
+    controller: App\Controller\AdminController::excelAction

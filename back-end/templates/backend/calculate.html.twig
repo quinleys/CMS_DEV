@@ -1,0 +1,29 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block main %}
+
+<div class="container">
+<div class="row">
+<div class="col">
+<h1 >Periode</h1>
+</div>
+<div class="col my-auto text-right">
+<a class="btn btn-primary m-1"   href="{{ path('download_pdf_admin', {id: period.id}) }}"  role="button">Exporteer als PDF</a>
+<a class="btn btn-primary m-1"   href="{{ path('download_excel_admin', {id: period.id}) }}"  role="button">Exporteer als XLS</a>
+<a class="btn btn-primary m-1"   href="{{ path('mail', {id: period.id}) }}"  role="button">Mail</a>
+</div>
+</div>
+<ul class="list-group">
+  <li class="list-group-item">Periode informatie: {{ period.title}}, periode: {{ period.startDate|date('Y-m-d') }} - {{ period.endDate|date('Y-m-d') }}</li>
+  <li class="list-group-item">Klanten informatie: {{ period.getCustomer().name }}, adres: {{ period.getCustomer().adress }}, telefoon: {{ period.getCustomer().phone }} </li>
+  <li class="list-group-item">Aantal opdracht: {{period.getPosts().count()}} </li>
+  <li class="list-group-item">Totaal aantal gepresteerde uren: {{timeworked|date('H')}} uren {{timeworked|date('i')}} minuten {{timeworked|date('s')}} seconden </li>
+  <li class="list-group-item">Prijs voor gepresteerde uren: {{totalprice}} </li>
+   <li class="list-group-item">Totaal aantal kilometers: {{totalKm}}</li>
+    <li class="list-group-item">Prijs voor kilometers: {{totalpricekm}} </li>
+    <li class="list-group-item"><h4>Total Prijs </h4> </li>
+    <li class="list-group-item">{{priceToPay}} </li>
+</ul>
+
+</div>
+{% endblock %}
