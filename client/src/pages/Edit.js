@@ -130,10 +130,26 @@ class Edit extends Component {
         this.setState({
             errormsg: ''
         }, function(){
-        let start = new Date(this.state.date  + 'T' + this.state.start + ':00')
-        let pauze = new Date (this.state.date + 'T' + this.state.pauze + ':00')
-        console.log(start , 'start')
-        let end = new Date(this.state.date  + 'T' + this.state.stop + ':00')
+            let start;
+            let pauze 
+            let end 
+            console.log(this.state.date, this.state.start, this.state.pauze, this.state.stop)
+            if(this.state.start.length != 8){
+                start = new Date(this.state.date  + 'T' + this.state.start + ':00')
+            }else {
+                start = new Date(this.state.date + 'T' + this.state.start)
+            }
+            if(this.state.pauze.length != 8){
+                pauze  = new Date (this.state.date + 'T' + this.state.pauze + ':00')
+            } else {
+                pauze = new Date (this.state.date + 'T' + this.state.pauze )
+            }
+            if(this.state.stop.length != 8){
+               end = new Date(this.state.date  + 'T' + this.state.stop + ':00')
+            } else {
+                end = new Date(this.state.date  + 'T' + this.state.stop )
+            }
+      
         let calc = end - start
         let newpauze = pauze - new Date( this.state.date + 'T' + '00:00:00')
 

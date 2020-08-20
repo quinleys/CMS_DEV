@@ -177,6 +177,8 @@ easy_admin:
       form:
         fields:
           - {type: "group", icon: "pencil", label: "Basic information", css_class: "col-lg-7"}
+          - firstName
+          - lastName
           - username
           - email
           - password

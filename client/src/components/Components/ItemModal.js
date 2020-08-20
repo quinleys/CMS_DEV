@@ -345,7 +345,7 @@ class ItemModal extends Component {
                                 <Input type="select" name="customer" id="customer" className="mb-2" onChange={this.onChange} required>
                                     {console.log(this.props.item.customers['hydra:member'])}
                                   {this.state.customer == "" ?  <option value="" >Kies een klant ...</option>: null}
-                                  { this.props.item.customers && this.props.item.customers['hydra:totalItems'] >= 1 ? this.props.item.customers['hydra:member'].map(item => {
+                                  { !this.props.item.customersloading && this.props.item.customers && this.props.item.customers['hydra:totalItems'] >= 1 ? this.props.item.customers['hydra:member'].map(item => {
                                     return(<option key={item.id} value={item.id} >{item.name} {console.log(item)}</option>)
                                 }) : <option>Loading...</option> }  
                                 </Input>

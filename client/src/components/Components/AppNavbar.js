@@ -28,6 +28,13 @@ class AppNavbar extends Component {
         menu: false,
         achor: null,
     }
+    componentWillUnmount(){
+        this.setState = {
+            isOpen: false
+        }
+    }
+       
+    
     static propTypes = {
         auth: PropTypes.object.isRequired
     }
@@ -69,7 +76,7 @@ class AppNavbar extends Component {
                     >
                     <MenuItem className="my-2" onClick={() => this.togglemenu()}> <Link to="/profile"> <PersonIcon /> Profiel</Link></MenuItem>
                     <MenuItem className="my-2" onClick={() => this.togglemenu()}> <Link to="/calendar"> <TodayIcon /> Kalender</Link></MenuItem>
-                    <MenuItem onClick={() => this.props.logout()}><Logout /></MenuItem>
+                    <MenuItem onClick={() => this.togglemenu(), () => this.props.logout() }><Logout /></MenuItem>
                     </Menu>
                     </div>
                     <div className="d-sm-block d-md-none">
@@ -89,9 +96,9 @@ class AppNavbar extends Component {
                         </NavLink>
                         </NavItem>
                         <Divider />
-                        
-                      <Logout />
                        
+                      <Logout />
+                   
                     </div>
             </Fragment>
         )

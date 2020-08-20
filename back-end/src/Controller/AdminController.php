@@ -237,7 +237,10 @@ class AdminController extends EasyAdminController
         ->setBody(
             $this->renderView(
                 'emails/period.html.twig',
-                
+                [
+                     'customer' => $retrievedPeriods->getCustomer(),
+                     
+                 ]
             ), 'text/html'
             );
 

@@ -41,7 +41,28 @@ class Detail extends Component {
         })
         
     } 
-
+    componentWillUnmount(){
+        this.setState({
+            modal: false,
+            title: '',
+            description: '',
+            finished: false,
+            transport: 0,
+            pauze: 0,
+            customer: 0,
+            materials: [],
+            loaded: false,
+            start: 0,
+            period: 0,
+            errormsg: "",
+            stop: 10,
+            date: '2020-08-08',
+            allMaterials: this.props.item.materials,
+            allCustomers: this.props.item.customers,
+            loadedcustomers: false,
+        })
+       
+    }
     loadCustomers = () => {
         if(this.props.item.materials[0] && this.props.item.customers[0]){
             this.setState({
@@ -213,7 +234,8 @@ class Detail extends Component {
     render() {
         return (
             <Container>
-                {this.props.item.loading  && this.props.item.customersloading  ? <Spinner/>: 
+                {console.log(this.props.item.item.id, this.state.id, this.props.item.item)}
+                {this.props.item.loading  && this.props.item.customersloading && this.props.item.item.id == this.state.id  ? <Spinner/>: 
              this.props.error.notAllowed ? 'NOT ALLOWED' : 
              !this.state.loaded? <div> {this.setCorrect()} <Spinner/> </div>: 
             <div>

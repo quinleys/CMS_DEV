@@ -26,12 +26,12 @@
 <h6>Periode informatie</h6>
 <p>Aantal uitgevoerde opdracht: {{period.getPosts().count()}} </p>
 <p>Totaal aantal gepresteerde uren: {{timeworked|date('H')}} uren {{timeworked|date('i')}} minuten {{timeworked|date('s')}} seconden </p>
-<p>Prijs voor gepresteerde uren: {{totalprice}} </p>
+<p>Prijs voor gepresteerde uren: {{totalprice|round(2, 'floor')}} </p>
 <p>Totaal aantal kilometers: {{totalKm}} </p>
-<p>Prijs voor kilometers: {{totalpricekm}} </p>
+<p>Prijs voor kilometers: {{totalpricekm|round(2, 'floor')}} </p>
  <hr style="color: FFF"/>
 <h4>Totale Prijs </h4>
-<h4>{{priceToPay}}</h4>
+<h4>{{priceToPay|round(2, 'floor')}}</h4>
 </div>
 </div>
 </div>
