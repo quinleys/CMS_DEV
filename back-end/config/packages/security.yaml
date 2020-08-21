@@ -40,12 +40,13 @@ security:
                     - App\Security\CustomAuthAuthenticator
             logout:
                 path: app_logout
-
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: '^/client', roles: ROLE_CLIENT}
         - { path: '^/backend', roles: ROLE_ADMIN }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+    access_denied_url:
+        '/login'
       
 
