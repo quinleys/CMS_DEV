@@ -63,6 +63,7 @@ class Posts extends Component {
                         return(
                             <PostCard id={m.id} date={m.date} customer={m.customer.name} finished={m.finished} title={m.title} description={m.description} materials={m.materials}/>
                         )})}  
+                        {this.props.item.items.data["hydra:totalItems"] == 0 ? <p>Geen werkbonnen</p>: null}
                      {this.props.item.items.data["hydra:totalItems"] > 10 ? 
                      <div className="col-12">
                      <Pagination

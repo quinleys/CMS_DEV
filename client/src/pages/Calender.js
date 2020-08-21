@@ -134,6 +134,7 @@ class Calender extends Component {
             makeData: true,
             currentViewName: 'Day',
             hoursworked: 0,
+            hourspauze: 0,
         }
     }
     componentDidMount(){
@@ -173,14 +174,26 @@ class Calender extends Component {
             if(this.state.makeData){
 
                 this.props.item.calendarItems['hydra:member'].map(m => {
-              
+/*                   let endtime = moment(m.date).format('YYYY-MM-DD') + 'T' +  m.stop).diff(moment(m.pauze));
+                  console.log(endtime,"endtime", m.stop, m.pauze) */
+                  let calcpauze = new Date (moment(m.date).format('YYYY-MM-DD') + 'T' + m.pauze);
+                  let calcStart = new Date(moment(m.date).format('YYYY-MM-DD') + 'T' + m.stop)
+                  let hours = calcStart.setHours(calcStart.getHours() + calcpauze.getHours())
+                  console.log(calcStart.getHours() + calcpauze.getHours())
+                  let minutes = calcStart.setMinutes(calcStart.getMinutes() + calcpauze.getMinutes())
+                  console.log(calcStart.getMinutes() , calcpauze.getMinutes())
+                  console.log(hours + minutes)
+                  let total = hours + minutes
                   let item = {
                     "id" : m.id,
                     "title" : m.title,
+                    "zerodate": moment(m.date).format('YYYY-MM-DD') + 'T' +'00:00:00',
                     "startDate": moment(m.date).format('YYYY-MM-DD') + 'T' + m.start,
                     "endDate": moment(m.date).format('YYYY-MM-DD') + 'T' + m.stop,
+                    "pauze": moment(m.date).format('YYYY-MM-DD') + 'T' + m.pauze,
+                    "calcstart": moment(m.date).format('YYYY-MM-DD') + 'T' + new Date(calcStart).toISOString().slice(11, -1) ,
                     "period": m.period,
-                      'customer' : m.customer
+                    'customer' : m.customer,
                   }
                   if(this.state.data.includes(item)){
                     this.setState({data: this.state.data.filter(function(m) { 
@@ -189,6 +202,7 @@ class Calender extends Component {
                   }else{
                     this.setState(previousState => ({
                         data: [...previousState.data, item]
+                   
                     }));
                   }
                   
@@ -252,21 +266,28 @@ class Calender extends Component {
 
          
           this.setState({
-              hoursworked: 0
+              hoursworked: 0,
+              hourspauze: 0
           }, function(){
             console.log('calc stats', this.state.data)
             let uren = 0
+            let pauze = 0
             this.state.data.map(m => {
                 console.log(m)
-                console.log(moment(m.endDate).diff(moment(m.startDate)))
-                uren = uren + moment(m.endDate).diff(moment(m.startDate))
+              /*   console.log(m.calcstart.addHours(m.calcpauze.getHours()),'calc pauze') */
+                uren = uren + moment(m.endDate).diff(moment(m.calcstart))
+                pauze = pauze + moment(m.pauze).diff(moment(m.zerodate))
+                console.log('PAUZE',m.pauze, moment(m.pauze), pauze)
+               console.log(m.calcstart, m.endDate)
+                console.log(pauze, 'pauze')
                 console.log('uurkes',uren, this.state.hoursworked + uren)
                 console.log(moment(uren).format('H-m-s'))
-
+                console.log(moment(pauze).format('H-m-s'))
                 this.setState({
-                    hoursworked: this.convertMS(uren)
+                    hoursworked: this.convertMS(uren),
+                    hourspauze: this.convertMS(pauze),
                 }, function(){
-                    console.log(this.state.hoursworked)
+                    console.log('states after fix', this.state.hoursworked, this.state.hourspauze)
                 })
             })
           })
@@ -274,7 +295,8 @@ class Calender extends Component {
       }
 
     convertMS = ( milliseconds )  => {
-        var day, hour, minute, seconds;
+      console.log(milliseconds)
+        var day = 0, hour = 0, minute = 0, seconds = 0;
         seconds = Math.floor(milliseconds / 1000);
         minute = Math.floor(seconds / 60);
         seconds = seconds % 60;
@@ -301,6 +323,7 @@ class Calender extends Component {
                     <div>
                         Uren gewerkt {this.state.currentViewName == "Day" ? "deze dag" : this.state.currentViewName == "Week" ? "deze week" : this.state.currentViewName == "Month" ? "deze maand" : null } : { this.state.hoursworked == 0 ? 0 : `${this.state.hoursworked.day} dagen ${this.state.hoursworked.hour}uren ${this.state.hoursworked.minute}minuten ${this.state.hoursworked.seconds} seconden`}
                         
+                        <p>Pauze : {this.state.hourspauze.hour} uren {this.state.hourspauze.minute} minuten</p>
                         </div>
                     : null }
                     </div>     

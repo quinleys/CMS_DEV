@@ -94,7 +94,7 @@ export const login = ({username, password}) => (dispatch) => {
                 
                 if(element.username === username){
                     console.log('element',element.roles)
-                    if(element.roles == 'ROLE_CLIENT' || element.roles == "ROLE_ONDERAANNEMER"){
+                    if(element.roles == 'ROLE_USER' || element.roles == "ROLE_ONDERAANNEMER"){
                         dispatch({
                             type: LOGIN_SUCCES,
                             payload: element

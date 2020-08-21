@@ -337,7 +337,7 @@ class AdminController extends EasyAdminController
         
         $diff = 0;
         $totalTime = new DateTime('00:00:00');
-        $totalPrice= 0;
+        $totalPrice = 0;
         $totalKm = 0;
         $totalpricekm = 0;
         // calc all information needed
@@ -458,7 +458,7 @@ class AdminController extends EasyAdminController
             
             // Create the excel file in the tmp directory of the system
             $writer->save($temp_file);
-            $this->addFlash('success', 'Excel file gedownload');
+            /* $this->addFlash('success', 'Excel file gedownload'); */
             // Return the excel file as an attachment
             return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_INLINE);
         }

@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div class="row my-3">
-<div class="col">
+<div class="col-md-4">
 <h1>Periode</h1>
 </div>
-<div class="col my-auto text-right p-0">
+<div class="col-md-8 my-auto text-right p-0">
  {% if period.isConfirmed  == false %}
-<a class="btn btn-primary mx-2 "  href="{{path('set_active', {id:period.id}) }}">Goedkeuren</a>
+<a class="btn btn-primary m-2 "  href="{{path('set_active', {id:period.id}) }}">Goedkeuren</a>
  {% endif %}
-<a class="btn btn-primary mx-2" href="/client/periods/{{period.id}}/complaint" role="button">Fout melden</a>
-<a class="btn btn-primary mx-2" href="{{ path('download_pdf', {id: period.id}) }}" role="button">Exporten</a>
+<a class="btn btn-primary m-2" href="/client/periods/{{period.id}}/complaint" role="button">Fout melden</a>
+<a class="btn btn-primary m-2" href="{{ path('download_pdf', {id: period.id}) }}" role="button">Exporten</a>
 </div>
 <div class="row">
 <div class="col-lg-4">

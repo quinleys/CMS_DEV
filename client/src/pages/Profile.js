@@ -136,20 +136,25 @@ class Profile extends Component {
     calcStats = () => {
        console.log('calc that shit', this.state.data)
        this.setState({
-                hoursworked: 0
+                hoursworked: 0,
+                hourspauze: 0
             }, function(){
             console.log('calc stats', this.state.data)
             let uren = 0
+            let pauze = 0
             this.state.data.map(m => {
                 let endDate = new Date(m.end);
-                let startDate = new Date (m.start)
+                let startDate = new Date (m.calcstart);
+                let pauzeDate = new Date (m.pauze);
+                let zeroDate = new Date (m.zerodate)
                 console.log(endDate, startDate, endDate - startDate, m.end)
                 uren = uren + (endDate - startDate)
                 console.log('uurkes',uren, this.state.hoursworked + uren)
-        
+                pauze = pauze +(pauzeDate - zeroDate)
 
                 this.setState({
-                    hoursworked: this.convertMS(uren)
+                    hoursworked: this.convertMS(uren),
+                    hourspauze: this.convertMS(pauze),
                 }, function(){
                     console.log(this.state.hoursworked)
                 })
@@ -183,13 +188,23 @@ class Profile extends Component {
         if(this.state.makeData){
             console.log(this.props.item.customerItems['hydra:member'], 'customeritems')
             this.props.item.customerItems['hydra:member'].map(m => {
+                let calcpauze = new Date ( m.date.split('T')[0] + 'T'+ m.pauze);
+                let calcStart = new Date( m.date.split('T')[0] + 'T'+ m.stop)
+                let hours = calcStart.setHours(calcStart.getHours() + calcpauze.getHours())
+                console.log(calcStart.getHours() + calcpauze.getHours())
+                let minutes = calcStart.setMinutes(calcStart.getMinutes() + calcpauze.getMinutes())
+                console.log(calcStart.getMinutes() , calcpauze.getMinutes())
+                console.log(hours + minutes)
               let item = {
                 "id" : m.id,
                 "title" : m.title,
                 'start' : m.date.split('T')[0] + 'T' + m.start ,
                 "end": m.date.split('T')[0] + 'T' + m.stop ,
                 "period": m.period,
-                'customer' : m.customer
+                'customer' : m.customer,
+                "zerodate":  m.date.split('T')[0] + 'T'  +'00:00:00',
+                "pauze":  m.date.split('T')[0] + 'T'+ m.pauze,
+                "calcstart":  m.date.split('T')[0] + 'T' + new Date(calcStart).toISOString().slice(11, -1) ,
               }
               if(this.state.data.includes(item)){
                 console.log('inside incluse')
@@ -310,8 +325,10 @@ class Profile extends Component {
             </Input>
             { this.state.hoursworked !== null  ? this.state.customer !== "" ?
             <div>
-            <p> Dagen: {this.state.hoursworked.day} Uren: {this.state.hoursworked.hour} Minuten: {this.state.hoursworked.minute} Seconds: {this.state.hoursworked.seconds} </p>
-            <p>Aantal taken: {this.props.item.customerItems['hydra:totalItems'] }</p>
+            <h6>Aantal taken:</h6> <p>{this.props.item.customerItems['hydra:totalItems'] }</p>
+            <h6> Werkdagen: </h6> <p> {this.state.hoursworked.day} Dagen {this.state.hoursworked.hour} Uren {this.state.hoursworked.minute} Minuten {this.state.hoursworked.seconds} Seconds </p>
+            
+           <h6>Pauze :</h6> <p>{this.state.hourspauze.day} Dagen {this.state.hourspauze.hour} Uren {this.state.hourspauze.minute} Minuten {this.state.hourspauze.seconds} Seconds</p>
             </div>
                 : "0" : null }
             </CardBody>
