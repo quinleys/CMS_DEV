@@ -72,7 +72,7 @@ class Login extends Component {
                                 <Card>
                                     <CardBody>
                                     {this.props.error.id == 'LOGIN_FAIL' ? ( <Alert severity="error"> {this.props.error.msg.data.message} </Alert> ): null }
-                                    {this.props.error.id == 'LOGIN_WRONGROLE' ? ( <Alert severity="error"> {console.log(this.props.error.msg)} </Alert> ): null }
+                                    {this.props.error.id == 'LOGIN_WRONGROLE' ? ( <Alert severity="error"> {this.props.error.msg} </Alert> ): null }
                         <h1>Aanmelden</h1>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
