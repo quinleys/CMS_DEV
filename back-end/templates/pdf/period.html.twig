@@ -1,7 +1,7 @@
 {% extends 'pdftemplate.html.twig' %}
 {% block body %}
 
-
+<div>
 <h2>Periode informatie</h2>
 <h5>Bedrijf</h5>
 <p>Naam: <strong>Arte-tech</strong></p>
@@ -15,18 +15,53 @@
 <p>Periode: <strong>{{ period.title }}</strong></p>
 <p>Start datum: <strong> {{ period.startDate|date('Y-m-d') }}</strong></p>
 <p>Eind datum:  <strong>{{ period.endDate|date('Y-m-d') }}</strong></p>
-<p>Aantal uitgevoerde opdracht: <strong>{{period.getPosts().count()}}</strong> </p>
+
+
+<table class="table">
+<thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Taak</th>>
+    </tr>
+  </thead>
+    <tbody>
+   <tr>
+      <th scope="row">Aantal uitgevoerde opdracht:</th>
+      <td><strong>{{period.getPosts().count()}}</strong> </td>
+    </tr>
+      <tr>
+      <th scope="row">Totaal aantal gepresteerde uren:</th>
+      <td><strong> {{timeworked|date('H')}} uren {{timeworked|date('i')}} minuten {{timeworked|date('s')}} seconden</strong>  </td>
+    </tr>
+          <tr>
+      <th scope="row">Prijs voor gepresteerde uren</th>
+      <td><strong>{{totalprice|round(3, 'floor')}} </strong> </td>
+    </tr>
+          <tr>
+      <th scope="row">Totaal aantal kilometers:</th>
+      <td> <strong>{{totalKm}}</strong></td>
+    </tr>
+          <tr>
+      <th scope="row">Prijs voor kilometers: </th>
+      <td> <strong>{{totalpricekm|round(2, 'floor')}}</strong> </td>
+    </tr>
+              <tr>
+      <th scope="row">Total Prijs</th>
+      <td> <h4><strong>{{priceToPay|round(2, 'floor')}}</strong></h4></td>
+    </tr>
+    </tbody>
+    </table>
+{# <p>Aantal uitgevoerde opdracht: <strong>{{period.getPosts().count()}}</strong> </p>
 <p>Totaal aantal gepresteerde uren:<strong> {{timeworked|date('H')}} uren {{timeworked|date('i')}} minuten {{timeworked|date('s')}} seconden</strong> </p>
 <p>Prijs voor gepresteerde uren: <strong>{{totalprice|round(3, 'floor')}} </strong></p>
 <p>Totaal aantal kilometers: <strong>{{totalKm}}</strong> </p>
 <p>Prijs voor kilometers: <strong>{{totalpricekm|round(2, 'floor')}}</strong> </p>
 <h4>Total Prijs </h4>
 <h4><strong>{{priceToPay|round(2, 'floor')}}</strong></h4>
-</div>
-</div>
-</div>
+</div> #}
 
 
+<div class="page_break"></div>
 <h2>Posts overview</h2>
 <table class="table">
  <thead>

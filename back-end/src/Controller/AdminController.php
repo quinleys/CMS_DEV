@@ -44,12 +44,22 @@ class AdminController extends EasyAdminController
         $totalpricekm = 0;
 
         foreach ($retrievedPosts as $post)
-        {
+         {
             if($post->getStop()){
+
+
+
+                $secs = strtotime($post->getPauze())-strtotime("00:00:00");
+                $result = date("H:i:s",strtotime($post->getStart())+$secs);
                 // calc time
+            
                 $stop = new DateTime($post->getStop());
-                $start = new DateTime($post->getStart());
+                $start = new DateTime($result);
+                /* dd($start); */
+                
                 $diff = $stop->diff($start);
+      
+               
                 $totalTime->add($diff);
                 
                 // calc price
@@ -65,7 +75,18 @@ class AdminController extends EasyAdminController
 
                 if($retrievedUser->getUurtarief() == 0){
                     $hourlyPrice = 30;
-
+                    if($post->getDate()->format('D') == "Sat"){
+                        $specialprice = 30 * 0.5;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }else if ($post->getDate()->format('D') == "Sun"){
+                        $specialprice = 30 * 2;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }
+                    
+                
+                if($hours > 8 || ($hours == 8 && $minutes >= 1) && $post->getDate()->format('D') !== "Sat" && $post->getDate()->format('D') !== "Sun"){
+                   $hourlyPrice = $hourlyPrice + ($hourlyPrice*0.2);
+                }
                     $uurprijs = $hourlyPrice * $hours;
                     $minutenprijs = $hourlyPrice * ($minutes/60);
                     
@@ -77,6 +98,18 @@ class AdminController extends EasyAdminController
                 }else{
                     // prijs uren
                     $hourlyPrice = $retrievedUser->getUurtarief();
+                    if($post->getDate()->format('D') == "Sat"){
+                        $specialprice = 30 * 0.5;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }else if ($post->getDate()->format('D') == "Sun"){
+                        $specialprice = 30 * 2;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }
+                    
+                
+                    if($hours > 8 || ($hours == 8 && $minutes >= 1) && $post->getDate()->format('D') !== "Sat" && $post->getDate()->format('D') !== "Sun"){
+                    $hourlyPrice = $hourlyPrice + ($hourlyPrice*0.2);
+                    }
                     $transportKost = $retrievedUser->getTransportkost();
                     
                     $uurprijs = $hourlyPrice * $hours;
@@ -89,8 +122,8 @@ class AdminController extends EasyAdminController
                     $totalpricekm += $post->getTransport() * $transportKost;
 
                 }
-            } 
-        } 
+             } 
+         } 
 
         return $this->render('backend/calculate.html.twig', [
             'period' => $retrievedPeriods,
@@ -131,50 +164,83 @@ class AdminController extends EasyAdminController
          // calc all information needed
          foreach ($retrievedPosts as $post)
          {
-             if($post->getStop()){
-                 // calc time
-                 $stop = new DateTime($post->getStop());
-                 $start = new DateTime($post->getStart());
-                 $diff = $stop->diff($start);
-                 $totalTime->add($diff);
-                 
-                 // calc price
-                 $totalKm += $post->getTransport();
+            if($post->getStop()){
+
+
+
+                $secs = strtotime($post->getPauze())-strtotime("00:00:00");
+                $result = date("H:i:s",strtotime($post->getStart())+$secs);
+                // calc time
+            
+                $stop = new DateTime($post->getStop());
+                $start = new DateTime($result);
+                /* dd($start); */
                 
-                 $retrievedUser = $em->getRepository(User::class)->findOneBy([
-                     'id' => $post->getUser()
-                 ]);
- 
-                 $hours = $diff->h;
-                 $minutes = $diff->i;
-                 $seconds = $diff->s;
- 
-                 if($retrievedUser->getUurtarief() == 0){
-                     $hourlyPrice = 30;
- 
-                     $uurprijs = $hourlyPrice * $hours;
-                     $minutenprijs = $hourlyPrice * ($minutes/60);
-                     
-                     $totalpricepost = $uurprijs + $minutenprijs;
-                     $totalPrice += $totalpricepost;
- 
-                     $totalpricekm += $post->getTransport() * 1;
-                   
-                 }else{
-                     // prijs uren
-                     $hourlyPrice = $retrievedUser->getUurtarief();
-                     $transportKost = $retrievedUser->getTransportkost();
-                     
-                     $uurprijs = $hourlyPrice * $hours;
-                     $minutenprijs = $hourlyPrice * ($minutes/60);
-                     
-                     $totalpricepost = $uurprijs + $minutenprijs;
-                     $totalPrice += $totalpricepost;
- 
-                     // prijs km
-                     $totalpricekm += $post->getTransport() * $transportKost;
- 
-                 }
+                $diff = $stop->diff($start);
+      
+               
+                $totalTime->add($diff);
+                
+                // calc price
+                $totalKm += $post->getTransport();
+               
+                $retrievedUser = $em->getRepository(User::class)->findOneBy([
+                    'id' => $post->getUser()
+                ]);
+
+                $hours = $diff->h;
+                $minutes = $diff->i;
+                $seconds = $diff->s;
+
+                if($retrievedUser->getUurtarief() == 0){
+                    $hourlyPrice = 30;
+                    if($post->getDate()->format('D') == "Sat"){
+                        $specialprice = 30 * 0.5;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }else if ($post->getDate()->format('D') == "Sun"){
+                        $specialprice = 30 * 2;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }
+                    
+                
+                if($hours > 8 || ($hours == 8 && $minutes >= 1) && $post->getDate()->format('D') !== "Sat" && $post->getDate()->format('D') !== "Sun"){
+                   $hourlyPrice = $hourlyPrice + ($hourlyPrice*0.2);
+                }
+                    $uurprijs = $hourlyPrice * $hours;
+                    $minutenprijs = $hourlyPrice * ($minutes/60);
+                    
+                    $totalpricepost = $uurprijs + $minutenprijs;
+                    $totalPrice += $totalpricepost;
+
+                    $totalpricekm += $post->getTransport() * 1;
+                  
+                }else{
+                    // prijs uren
+                    $hourlyPrice = $retrievedUser->getUurtarief();
+                    if($post->getDate()->format('D') == "Sat"){
+                        $specialprice = 30 * 0.5;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }else if ($post->getDate()->format('D') == "Sun"){
+                        $specialprice = 30 * 2;
+                        $hourlyPrice = $hourlyPrice + $specialprice;
+                    }
+                    
+                
+                    if($hours > 8 || ($hours == 8 && $minutes >= 1) && $post->getDate()->format('D') !== "Sat" && $post->getDate()->format('D') !== "Sun"){
+                    $hourlyPrice = $hourlyPrice + ($hourlyPrice*0.2);
+                    }
+                    $transportKost = $retrievedUser->getTransportkost();
+                    
+                    $uurprijs = $hourlyPrice * $hours;
+                    $minutenprijs = $hourlyPrice * ($minutes/60);
+                    
+                    $totalpricepost = $uurprijs + $minutenprijs;
+                    $totalPrice += $totalpricepost;
+
+                    // prijs km
+                    $totalpricekm += $post->getTransport() * $transportKost;
+
+                }
              } 
          } 
           // Retrieve the HTML generated in our twig file
@@ -277,50 +343,83 @@ class AdminController extends EasyAdminController
         // calc all information needed
         foreach ($retrievedPosts as $post)
         {
-            if($post->getStop()){
-                // calc time
-                $stop = new DateTime($post->getStop());
-                $start = new DateTime($post->getStart());
-                $diff = $stop->diff($start);
-                $totalTime->add($diff);
-                
-                // calc price
-                $totalKm += $post->getTransport();
+           if($post->getStop()){
+
+
+
+               $secs = strtotime($post->getPauze())-strtotime("00:00:00");
+               $result = date("H:i:s",strtotime($post->getStart())+$secs);
+               // calc time
+           
+               $stop = new DateTime($post->getStop());
+               $start = new DateTime($result);
+               /* dd($start); */
                
-                $retrievedUser = $em->getRepository(User::class)->findOneBy([
-                    'id' => $post->getUser()
-                ]);
+               $diff = $stop->diff($start);
+     
+              
+               $totalTime->add($diff);
+               
+               // calc price
+               $totalKm += $post->getTransport();
+              
+               $retrievedUser = $em->getRepository(User::class)->findOneBy([
+                   'id' => $post->getUser()
+               ]);
 
-                $hours = $diff->h;
-                $minutes = $diff->i;
-                $seconds = $diff->s;
+               $hours = $diff->h;
+               $minutes = $diff->i;
+               $seconds = $diff->s;
 
-                if($retrievedUser->getUurtarief() == 0){
-                    $hourlyPrice = 30;
+               if($retrievedUser->getUurtarief() == 0){
+                   $hourlyPrice = 30;
+                   if($post->getDate()->format('D') == "Sat"){
+                       $specialprice = 30 * 0.5;
+                       $hourlyPrice = $hourlyPrice + $specialprice;
+                   }else if ($post->getDate()->format('D') == "Sun"){
+                       $specialprice = 30 * 2;
+                       $hourlyPrice = $hourlyPrice + $specialprice;
+                   }
+                   
+               
+               if($hours > 8 || ($hours == 8 && $minutes >= 1) && $post->getDate()->format('D') !== "Sat" && $post->getDate()->format('D') !== "Sun"){
+                  $hourlyPrice = $hourlyPrice + ($hourlyPrice*0.2);
+               }
+                   $uurprijs = $hourlyPrice * $hours;
+                   $minutenprijs = $hourlyPrice * ($minutes/60);
+                   
+                   $totalpricepost = $uurprijs + $minutenprijs;
+                   $totalPrice += $totalpricepost;
 
-                    $uurprijs = $hourlyPrice * $hours;
-                    $minutenprijs = $hourlyPrice * ($minutes/60);
-                    
-                    $totalpricepost = $uurprijs + $minutenprijs;
-                    $totalPrice += $totalpricepost;
+                   $totalpricekm += $post->getTransport() * 1;
+                 
+               }else{
+                   // prijs uren
+                   $hourlyPrice = $retrievedUser->getUurtarief();
+                   if($post->getDate()->format('D') == "Sat"){
+                       $specialprice = 30 * 0.5;
+                       $hourlyPrice = $hourlyPrice + $specialprice;
+                   }else if ($post->getDate()->format('D') == "Sun"){
+                       $specialprice = 30 * 2;
+                       $hourlyPrice = $hourlyPrice + $specialprice;
+                   }
+                   
+               
+                   if($hours > 8 || ($hours == 8 && $minutes >= 1) && $post->getDate()->format('D') !== "Sat" && $post->getDate()->format('D') !== "Sun"){
+                   $hourlyPrice = $hourlyPrice + ($hourlyPrice*0.2);
+                   }
+                   $transportKost = $retrievedUser->getTransportkost();
+                   
+                   $uurprijs = $hourlyPrice * $hours;
+                   $minutenprijs = $hourlyPrice * ($minutes/60);
+                   
+                   $totalpricepost = $uurprijs + $minutenprijs;
+                   $totalPrice += $totalpricepost;
 
-                    $totalpricekm += $post->getTransport() * 1;
-                  
-                }else{
-                    // prijs uren
-                    $hourlyPrice = $retrievedUser->getUurtarief();
-                    $transportKost = $retrievedUser->getTransportkost();
-                    
-                    $uurprijs = $hourlyPrice * $hours;
-                    $minutenprijs = $hourlyPrice * ($minutes/60);
-                    
-                    $totalpricepost = $uurprijs + $minutenprijs;
-                    $totalPrice += $totalpricepost;
+                   // prijs km
+                   $totalpricekm += $post->getTransport() * $transportKost;
 
-                    // prijs km
-                    $totalpricekm += $post->getTransport() * $transportKost;
-
-                }
+               }
             } 
         } 
             $spreadsheet = new Spreadsheet();

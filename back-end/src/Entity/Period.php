@@ -152,7 +152,9 @@ class Period
     public function addPost(Post $post): self
     {
         if (!$this->posts->contains($post)) {
+
             $this->posts[] = $post;
+    
             $post->setPeriod($this);
         }
 

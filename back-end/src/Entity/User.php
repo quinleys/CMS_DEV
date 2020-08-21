@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 /**
@@ -38,6 +39,11 @@ class User implements UserInterface
      */
     private $lastName;
     /**
+     *
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
+     *
      * @Groups({"user"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
@@ -58,8 +64,10 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(min=3)
      * @Groups({"user"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $username;
 
@@ -81,9 +89,13 @@ class User implements UserInterface
      */
     private $posts;
     /**
+     * @Assert\Unique(
+     *     message = "The customer '{{ value }}' already is linked."
+     * )
      * @Groups({"user"})
      * @ORM\OneToOne(targetEntity="App\Entity\Customer")
      * @ORM\JoinColumn(name="customer_id",referencedColumnName="id")
+     * 
      */
     private $customer;
     
@@ -122,6 +134,7 @@ class User implements UserInterface
     }
     public function getUurtarief(): ?int
     {
+
         return $this->uurtarief;
     }
     public function getTransportkost(): ?int
@@ -149,8 +162,12 @@ class User implements UserInterface
     }
     public function setCustomer(Customer $customer):self
     {
-        $this->customer = $customer;
+        if($this->getRoles() == ['ROLE_CLIENT']){
+            $this->customer = $customer;
+          
+        }
         return $this;
+        
     }
     /**
      * @return Collection|Posts[]

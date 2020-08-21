@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.2",
+        "doctrine/annotations": "^1.10",
         "dompdf/dompdf": "^0.8.5",
         "easycorp/easyadmin-bundle": "2.3.9",
         "friendsofsymfony/rest-bundle": "^3.0",

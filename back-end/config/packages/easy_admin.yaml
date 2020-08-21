@@ -156,7 +156,6 @@ easy_admin:
           - customer
           - startDate
           - endDate
-          - posts
     Complaint:
       class: App\Entity\Complaint
       controller: App\Controller\AdminController

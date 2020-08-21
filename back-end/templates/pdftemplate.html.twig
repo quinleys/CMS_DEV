@@ -7,6 +7,12 @@
        {% block stylesheets %}
          <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
+        <style>
+        * {
+            font-family: 'sans-serif'
+        }
+        .page_break { page-break-before: always; }
+        </style>
     </head>
     <body>
     <div class="container">
