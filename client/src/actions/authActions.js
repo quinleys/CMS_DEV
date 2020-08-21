@@ -71,21 +71,30 @@ export const login = ({username, password}) => (dispatch) => {
     dispatch(clearErrors())
     axios.post('https://127.0.0.1:8000/api/login_check', body, config)
     .then(res => {
+        console.log(res)
         dispatch({
         type: LOGIN_TOKEN,
         payload: res.data
-    })})
-    .catch(err => {
+    })
+    dispatch(loadLoggedInUser(username))
+    }).catch(err => {
+        console.log('error',err.response)
         dispatch(returnErrors(err.response, err.response, 'LOGIN_FAIL'));
         dispatch({
             type: LOGIN_FAIL
         })
-    }).then(() => {
+    })
+
+}
+
+export const loadLoggedInUser = (username) => (dispatch) => {
+    if(localStorage.getItem('token')){
         axios.get('https://127.0.0.1:8000/api/users/',{ headers: { Authorization: "Bearer " + localStorage.getItem('token')} })
         .then(res => {
+            console.log(res)
             res.data['hydra:member'].forEach(element => {
                 if(element.username === username){
-
+    
                     if(element.roles == 'ROLE_USER' || element.roles == "ROLE_ONDERAANNEMER"){
                         dispatch({
                             type: LOGIN_SUCCES,
@@ -102,13 +111,11 @@ export const login = ({username, password}) => (dispatch) => {
                 
             });
         }).catch(err => {
-           
+           console.log('error',err.response)
             dispatch(returnLoadUser(err.response, err.response, 'LOGIN_FAIL'));
         })
-        
-    })
 }
-
+}
 //logout user 
 
 export const logout = () => (dispatch) => {

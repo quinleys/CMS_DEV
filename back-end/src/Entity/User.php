@@ -98,7 +98,21 @@ class User implements UserInterface
      * 
      */
     private $customer;
-    
+    /**
+    * @Assert\NotBlank()
+    * @Assert\Length(min=5, max=128)
+    */
+    private ?string $plainPassword = null;
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $password): void
+    {
+        $this->plainPassword = $password;
+    }
     public function __construct()
     {
         $this->posts = new ArrayCollection();

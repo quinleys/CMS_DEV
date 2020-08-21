@@ -10,20 +10,51 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use \Datetime;
 use App\Entity\Post;
 use App\Entity\User;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 
 class AdminController extends EasyAdminController
 {
+    private UserPasswordEncoderInterface $encoder;
 
+    private function setUserPlainPassword(User $user): void
+    {
+        if ($user->getPlainPassword()) {
+            $user->setPassword($this->encoder->encodePassword($user, $user->getPlainPassword()));
+        }
+    }
+
+    /**
+     * @required
+     */
+    public function setEncoder(UserPasswordEncoderInterface $encoder): void
+    {
+        $this->encoder = $encoder;
+    }
+
+    public function persistUserEntity(User $user): void
+    {
+        $this->setUserPlainPassword($user);
+
+        $this->persistEntity($user);
+    }
+
+    public function updateUserEntity(User $user): void
+    {
+        $this->setUserPlainPassword($user);
+
+        $this->updateEntity($user);
+    }
     public function calculateAction(Request $request, $id){
 
         $em = $this->getDoctrine()->getManager();
@@ -322,7 +353,7 @@ class AdminController extends EasyAdminController
         return $this->redirectToRoute('calculate',array('id' => $id));
     }
     
-    public function excelAction(Request $request,$id){
+        public function excelAction(Request $request,$id){
 
         $em = $this->getDoctrine()->getManager();
         $retrievedPeriods = $em->getRepository(Period::class)->findOneBy([
@@ -463,4 +494,6 @@ class AdminController extends EasyAdminController
             return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_INLINE);
         }
     
+
+
 }

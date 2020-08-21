@@ -174,14 +174,17 @@ easy_admin:
         collapse_actions: true
         actions: ['show','edit','delete']
         batch_actions: ['delete']
-      form:
+      new:
+        title:  field.user.add_new
         fields:
+                    # some fields like username here
+          - { property: username, label: Username }
+                    # plain password 
+          - { property: plainPassword, label: Password, type: 'password' }
           - {type: "group", icon: "pencil", label: "Basic information", css_class: "col-lg-7"}
           - firstName
           - lastName
-          - username
           - email
-          - password
           - uurtarief
           - transportkost 
           - customer
@@ -190,10 +193,3 @@ easy_admin:
             type_options:
               multiple: true
               choices: { 'Normal user': 'ROLE_USER', 'Administrator': 'ROLE_ADMIN', 'Onderaannemer': 'ROLE_ONDERAANNEMER', 'Klant': 'ROLE_CLIENT'}
-
-          
-          
-
-        
-
- 
