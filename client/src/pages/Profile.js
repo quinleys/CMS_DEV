@@ -3,15 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getCustomerItems } from '../actions/itemActions';
 import {
-    Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button, FormGroup, Form,Input, Label
+    Card, CardBody,
+    CardTitle, Button, FormGroup, Form,Input, Label
   } from 'reactstrap';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import moment from 'react-moment';
 import Alert from '@material-ui/lab/Alert';
 import  { getProfile, updateProfile } from '../actions/authActions';
-
+import { Redirect } from 'react-router-dom'
 class Profile extends Component {
     
     state = {
@@ -41,7 +39,6 @@ class Profile extends Component {
         this.props.getProfile()
     }
     setItem = (item) => {
-        /* console.log('setItem', item) */
         if(this.state.items.length == 0 ){
             this.setState({
                 items: [...this.state.items, item]
@@ -50,17 +47,8 @@ class Profile extends Component {
         }else{
             this.state.items.forEach(i => {
                 if( i.id == item.id){
-                    console.log('gelijk')
                 }
             })
-           /*  this.state.items.forEach(i => {
-                console.log(i.id, item.id)
-                 if(i.id !== item.id){
-                    this.setState({
-                        items: [...this.state.items, item]
-                    })
-                }
-            }); */
         }
 
     }
@@ -71,8 +59,7 @@ class Profile extends Component {
                 let todayDate = this.state.today - i
                 let longDate = this.state.year + "-" + this.state.month + "-" + todayDate
                 longDate = '2020-06-29'
-                /* console.log(typeof date, typeof longDate)
-                console.log(longDate) */
+              
                 if( date === longDate  /* '2020-08-08' */){
                     /* this.setState({
                         
@@ -134,12 +121,10 @@ class Profile extends Component {
         this.props.updateProfile(item)
     }
     calcStats = () => {
-       console.log('calc that shit', this.state.data)
        this.setState({
                 hoursworked: 0,
                 hourspauze: 0
             }, function(){
-            console.log('calc stats', this.state.data)
             let uren = 0
             let pauze = 0
             this.state.data.map(m => {
@@ -147,16 +132,12 @@ class Profile extends Component {
                 let startDate = new Date (m.calcstart);
                 let pauzeDate = new Date (m.pauze);
                 let zeroDate = new Date (m.zerodate)
-                console.log(endDate, startDate, endDate - startDate, m.end)
                 uren = uren + (endDate - startDate)
-                console.log('uurkes',uren, this.state.hoursworked + uren)
                 pauze = pauze +(pauzeDate - zeroDate)
-
                 this.setState({
                     hoursworked: this.convertMS(uren),
                     hourspauze: this.convertMS(pauze),
                 }, function(){
-                    console.log(this.state.hoursworked)
                 })
             })
             })
@@ -180,21 +161,16 @@ class Profile extends Component {
       };
   }
   setCustomerItems = () => {
-    console.log('Setcustomeritem')
     this.setState({
         data: [],
         prevItems: this.props.item.customerItems
     }, function(){
         if(this.state.makeData){
-            console.log(this.props.item.customerItems['hydra:member'], 'customeritems')
             this.props.item.customerItems['hydra:member'].map(m => {
                 let calcpauze = new Date ( m.date.split('T')[0] + 'T'+ m.pauze);
                 let calcStart = new Date( m.date.split('T')[0] + 'T'+ m.stop)
                 let hours = calcStart.setHours(calcStart.getHours() + calcpauze.getHours())
-                console.log(calcStart.getHours() + calcpauze.getHours())
                 let minutes = calcStart.setMinutes(calcStart.getMinutes() + calcpauze.getMinutes())
-                console.log(calcStart.getMinutes() , calcpauze.getMinutes())
-                console.log(hours + minutes)
               let item = {
                 "id" : m.id,
                 "title" : m.title,
@@ -207,7 +183,6 @@ class Profile extends Component {
                 "calcstart":  m.date.split('T')[0] + 'T' + new Date(calcStart).toISOString().slice(11, -1) ,
               }
               if(this.state.data.includes(item)){
-                console.log('inside incluse')
                 this.setState({data: this.state.data.filter(function(m) { 
                     return m !== item
                 })});
@@ -222,7 +197,6 @@ class Profile extends Component {
              this.setState({
                makeData: false
              }, function(){
-                 console.log('go to calc stats')
               this.calcStats()
              })
           
@@ -236,17 +210,15 @@ class Profile extends Component {
         const { isAuthenticated, user, profile } = this.props.auth;
         const { items } = this.props.item;
         return (
+            this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
             <div>
-                {console.log(this.props.item,'item')}
             { this.state.prevItems !== this.props.item.customerItems && !this.props.item.itemloading && !this.props.item.customerloading && this.props.item.customerItems['hydra:totalItems'] >= 0 && this.state.makeData ?  this.setCustomerItems() : null }
             <div class="container">
                 { this.props.auth.loading ? 'loading ...' : 
                  !this.state.loaded ? <div> {this.setCorrect()} loading... </div>: 
                 <div>
                       <Card>
-                          {console.log(profile, 'profile')}
                         <CardBody>
-                         {console.log(this.props.error)}
                          <h4>Profiel</h4>
                         <CardTitle>Email: { user ? <strong>{user.email? ` ${user.email}` : ` ${user[0].name}` }</strong> : <strong>  {localStorage.getItem('username')} </strong>}</CardTitle>
                         <CardTitle>Gebruikersnaam: { user ? <strong>{user.username? ` ${user.username}` : ` ${user[0].name}` }</strong> : <strong>  {localStorage.getItem('username')} </strong>}</CardTitle>
@@ -316,11 +288,10 @@ class Profile extends Component {
                    
             <Label for="customer">Klanten</Label>
                                 <Input type="select" name="customer" id="customer" className="mb-2" onChange={this.onChangeClient} required>
-                                    {console.log(this.props.item.customers['hydra:member'])}
                                     <option value="" >Kies een klant ...</option>
                                   {this.state.customer == "" ?  <option value="" >Kies een klant ...</option>: null}
                                   { this.props.item.customers && this.props.item.customers['hydra:totalItems'] >= 1 ? this.props.item.customers['hydra:member'].map(item => {
-                                    return(<option key={item.id} value={item.id} >{item.name} {console.log(item)}</option>)
+                                    return(<option key={item.id} value={item.id} >{item.name}</option>)
                                 }) : <option>Loading...</option> }  
             </Input>
             { this.state.hoursworked !== null  ? this.state.customer !== "" ?

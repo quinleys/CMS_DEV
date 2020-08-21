@@ -5,12 +5,11 @@ import { logout } from './authActions';
 import { toast } from 'react-toastify';
 
 export const getItems = () => (dispatch) => {
-    
+    if(localStorage.getItem('id') !== null){
     dispatch(setItemsLoading());
 
     axios.get('https://127.0.0.1:8000/api/posts?pagination=true&itemsPerPage=10&user=' + localStorage.getItem('id') + '&order[date]=DESC', { headers: { Authorization: "Bearer " + localStorage.getItem('token') } } )
     .then(res => {
-       console.log(res, 'gettingItems')
        dispatch({
            type: GET_ITEMS,
            payload: res
@@ -23,6 +22,7 @@ export const getItems = () => (dispatch) => {
         })
         
     })
+}
 };
 
 export const getCustomerItems = (customer) => (dispatch) => {
@@ -30,7 +30,6 @@ export const getCustomerItems = (customer) => (dispatch) => {
     dispatch(setItemsLoading());
     axios.get('https://127.0.0.1:8000/api/posts?user=' + localStorage.getItem('id') + '&customer=' + customer ,{ headers: { Authorization: "Bearer " + localStorage.getItem('token') } } )
     .then(res => {
-       console.log(res, 'getting customer items')
        dispatch({
            type: GET_CUSTOMER_ITEMS,
            payload: res.data
@@ -50,7 +49,6 @@ export const loadNextPage = (page) => (dispatch) => {
 
     axios.get('https://127.0.0.1:8000/api/posts?pagination=true&itemsPerPage=10&user=' + localStorage.getItem('id') + '&order[date]=DESC' + '&page=' + page, { headers: { Authorization: "Bearer " + localStorage.getItem('token') } } )
     .then(res => {
-       console.log(res, 'gettingItems')
        dispatch({
            type: GET_ITEMS,
            payload: res
@@ -69,18 +67,15 @@ export const getItem = id => (dispatch) => {
 
     axios.get('https://127.0.0.1:8000/api/posts/' + id, {headers: { Authorization: "Bearer " + localStorage.getItem('token') }})
     .then(res => {
-        console.log(res)
         if(res.data.user.id == localStorage.getItem('id') || localStorage.getItem('userRole') == 'ROLE_ADMIN' ){
         dispatch({
             type: GET_ITEM,
             payload: res.data
         })
     }else{
-        console.log('not allowed')
         dispatch(notAllowed())
     }
     }).catch(err => {
-        console.log(err.response)
         if(err.response == 404){
             dispatch(notFound())
         }
@@ -97,7 +92,6 @@ export const clearAddedsuccess = () => (dispatch) => {
     }
 }
 export const addItem = item  => (dispatch) => {
-    // console.log(item);
     axios.post('https://127.0.0.1:8000/api/posts', item, { headers: { Authorization: "Bearer " + localStorage.getItem('token') }})
     .then(res => {
         dispatch({ 
@@ -139,7 +133,6 @@ export const getPeriods = (id) => (dispatch) => {
     dispatch(setMaterialsLoading());
     axios.get('https://127.0.0.1:8000/api/customers/' + id, { headers: { Authorization: "Bearer " + localStorage.getItem('token') }})
     .then(res => {
-        console.log(res.data.periods.length)
         if(res.data.periods.length >= 1){
             dispatch({
                 type: GET_PERIODS,
@@ -158,7 +151,6 @@ export const getPeriods = (id) => (dispatch) => {
     })
 }
 export const editItem = (item,id) => (dispatch) => {
-    console.log(localStorage.getItem('token'))
     axios.put('https://127.0.0.1:8000/api/posts/' + id, item, { headers: { Authorization: "Bearer " + localStorage.getItem('token')}})
     .then(res => {
         dispatch({
@@ -167,7 +159,6 @@ export const editItem = (item,id) => (dispatch) => {
         })
         toast.success('🥳 Update succesvol');
     }).catch(err => {
-        console.log(err.response)
         if(err.response == 404){
             dispatch(notFound())
         }
@@ -180,7 +171,9 @@ export const editItem = (item,id) => (dispatch) => {
 
 }
 export const getMaterials = () => (dispatch) => {
-    dispatch(setMaterialsLoading());
+
+    if(localStorage.getItem('id') !== null){
+        dispatch(setMaterialsLoading());
     axios.get('https://127.0.0.1:8000/api/materials', { headers: { Authorization: "Bearer " + localStorage.getItem('token') }} )
     .then(res => dispatch({
         type: GET_MATERIALS,
@@ -192,9 +185,11 @@ export const getMaterials = () => (dispatch) => {
             type: FAILED_ITEMS
         })
     })
+    }
 }
 
 export const getCustomers = () => (dispatch) => {
+    if(localStorage.getItem('id') !== null){
     dispatch(setCustomersLoading());
     axios.get('https://127.0.0.1:8000/api/customers', { headers: { Authorization: "Bearer " +  localStorage.getItem('token') }} )
     .then(res => {
@@ -202,9 +197,7 @@ export const getCustomers = () => (dispatch) => {
         type: GET_CUSTOMERS,
         payload: res.data
     })
-    console.log('customers',res)
 }).catch(err => {
-    console.log('err', err.response.status)
      if(err.response.status == 401){
         dispatch(logout())
     }else{
@@ -217,13 +210,13 @@ export const getCustomers = () => (dispatch) => {
     }
     })
 }
+}
 
 export const getItemsDate = (url) => (dispatch) => {
-    console.log(url, 'url')
     dispatch(setCalendarLoading());
     axios.get('https://127.0.0.1:8000/api/posts?user=' + localStorage.getItem('id') + url, { headers: { Authorization: "Bearer " + localStorage.getItem('token') }} )
     .then(res => {
-        console.log(res.data, 'items data')
+
         dispatch({
             type: GET_ITEMS_DATE,
             payload: res.data

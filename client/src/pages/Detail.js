@@ -3,14 +3,14 @@ import { Container } from 'reactstrap'
 import { getItem, getCustomers , editItem, getPeriods} from '../actions/itemActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {  Button, Form, Input, Label, FormGroup } from 'reactstrap';
+import {  Button, Input, Label, FormGroup } from 'reactstrap';
 import Select from 'react-select'
 import Switch from '@material-ui/core/Switch';
 import Spinner from '../components/Loading/Spinner'
 import moment from 'moment';
 import Card from '@material-ui/core/Card';
 import Alert from '@material-ui/lab/Alert';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 class Detail extends Component {
     state = {
         modal: false,
@@ -77,14 +77,11 @@ class Detail extends Component {
         }
     }
     selectChange = (e) => {
-        console.log('select', e)
         if(e){
             this.setState({
                 materials: []
             },function(){
-                console.log('eee', e)
                 e.map( m => {
-                    console.log('mmm',m)
                     let item = "/api/materials/" + m.id;
                     if(this.state.materials.includes(item)){
                         this.setState({materials: this.state.materials.filter(function(filter) { 
@@ -101,10 +98,7 @@ class Detail extends Component {
         }
     }
     setCorrect = () => {
-        console.log('set correct',this.props.item.item)
         if(this.props.item.item["@type"] == "Post"){
-            console.log('set correct 2',this.props.item.item)
-            console.log('period', this.props.item.item.period)
         this.setState({
             title: this.props.item.item.title,
             description: this.props.item.item.description,
@@ -138,7 +132,6 @@ class Detail extends Component {
                     }
                 })
             }
-            console.log(this.props.item.item.customer.id, 'id customer')
             this.props.getPeriods(this.props.item.item.customer.id)
             this.setState({
                 loaded: true
@@ -154,12 +147,9 @@ class Detail extends Component {
         }, function(){
         let start = new Date(this.state.date  + 'T' + this.state.start + ':00')
         let pauze = new Date (this.state.date + 'T' + this.state.pauze + ':00')
-        console.log(start , 'start')
         let end = new Date(this.state.date  + 'T' + this.state.stop + ':00')
         let calc = end - start
         let newpauze = pauze - new Date( this.state.date + 'T' + '00:00:00')
-
-        console.log('calc' , calc,newpauze,  calc > newpauze)
         if(calc,newpauze,  calc > newpauze ){
 
 
@@ -210,7 +200,6 @@ class Detail extends Component {
         })
     }
     onChange = (e) => {
-        console.log([e.target.name],e.target.value)
          let name = e.target.name
         if(e.target.name == 'transport' ){
             let value = parseInt(e.target.value)
@@ -226,15 +215,14 @@ class Detail extends Component {
         this.setState({ [e.target.name] : e.target.value}, function(){
             if(name == 'customer'){
                 this.props.getPeriods(this.state.customer)
-                console.log('this.getPeriods')
             }
         })
         }
     }
     render() {
         return (
+            this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
             <Container>
-                {console.log(this.props.item.item.id, this.state.id, this.props.item.item)}
                 {this.props.item.loading  && this.props.item.customersloading && this.props.item.item.id == this.state.id  ? <Spinner/>: 
              this.props.error.notAllowed ? 'NOT ALLOWED' : 
              !this.state.loaded? <div> {this.setCorrect()} <Spinner/> </div>: 
@@ -260,7 +248,6 @@ class Detail extends Component {
                 />
                 </div>
                 </div>
-                {console.log(this.state.date)}
                             <FormGroup>
                                 <Label for="item">Title</Label>
                                 <Input
@@ -346,14 +333,13 @@ class Detail extends Component {
                                 />
                                 <Label for="customer">Customer</Label>
                                 <Input type="select" name="customer" disabled id="customer" className="mb-2" value={this.state.customer} onChange={this.onChange}>
-                                    {console.log(this.props.item.customers['hydra:member'])}
+                                 
                                   { this.props.item.customers && this.props.item.customers['hydra:totalItems'] >= 1 ? this.props.item.customers['hydra:member'].map(item => {
                                     return(<option key={item.id} value={item.id} >{item.name}</option>)
                                 }) : <option>Loading...</option> }  
                                 </Input>
                                 <Label for="period">Periode</Label>
-                                {console.log("periods",this.props.item.periods, this.state.customer)}
-                                {console.log(this.state.period, this.state.customer)}
+                          
                                 <Input type="select" disabled name="period" id="period" value={this.state.period} className="mb-2" onChange={this.onChange}>
                                     {this.state.period == 0 ? <option value="">Kies een periode</option> : null}
                                   { !this.props.item.periodsloading && this.props.item.periods.length >= 1 && this.props.item.periods !== 'no periods' ? this.props.item.periods.map(item => {
@@ -361,7 +347,7 @@ class Detail extends Component {
                                 }) : <option>Selecteer een klant...</option> }  
                                 </Input>
                                <Label for="materials">Benodigdheden</Label>
-                               {console.log(this.props.item.item.materials,'materials')}
+                               
                                { this.props.item.materials && this.props.item.materials['hydra:totalItems'] >= 1 ?
                                <Select options={this.props.item.materials['hydra:member']} 
                                         isMulti

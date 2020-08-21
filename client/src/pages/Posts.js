@@ -4,10 +4,8 @@ import { getItems } from '../actions/itemActions';
 import PropTypes from 'prop-types';
 import ItemModal from '../components/Components/ItemModal';
 import { Container } from 'reactstrap';
-import { getMaterials, getCustomers, loadNextPage } from '../actions/itemActions';
+import { loadNextPage } from '../actions/itemActions';
 import Spinner from '../components/Loading/Spinner';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-import ListItem from '../components/Components/ListItem';
 import PostCard from '../components/Components/PostCard'
 import Alert from '@material-ui/lab/Alert';
 import Pagination from "react-js-pagination";
@@ -23,7 +21,6 @@ class Posts extends Component {
         this.props.getItems()
     }
     loadNextPage = e => {
-        console.log(e);
         this.setState({
             page: e
         })
@@ -32,7 +29,6 @@ class Posts extends Component {
         this.setState({
             pageUrl: e
         })
-        console.log(this.state.filterUrl + '?&page=' + e)
         if(this.state.filterUrl == '' ){
             this.props.getItems(this.state.filterUrl + '?page=' + e )
         }else {
@@ -50,7 +46,7 @@ class Posts extends Component {
             this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
                 !loading && this.props.item.items.status == 200  && this.props.item.customers !== [] ?
                 <Container>
-                    {  console.log('auth', this.props.auth.isAuthenticated) }
+             
                     <ItemModal />
                     <div className="row">
                         <div className="col-12">
@@ -59,7 +55,7 @@ class Posts extends Component {
                         </div>
                             {this.props.error.updateError ? <Alert>{this.props.error.updateError}</Alert> : null }
                             {this.props.item.items && this.props.item.items.data["hydra:member"].map((m, i) => {
-                            console.log('m', m.finished)
+                           
                         return(
                             <PostCard id={m.id} date={m.date} customer={m.customer.name} finished={m.finished} title={m.title} description={m.description} materials={m.materials}/>
                         )})}  
@@ -79,7 +75,7 @@ class Posts extends Component {
                     : null }
                    
                 </Container>
-                :  <div><Spinner /> {console.log('log',this.props.item.items)}</div>
+                :  <div><Spinner /> </div>
         )
     }
 }

@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Container, Button, Form, Input, Label, FormGroup, NavLink, Card, CardBody  } from 'reactstrap';
+import { Container, Button, Form, Input, Label, FormGroup, Card, CardBody  } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { login } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
 import Alert from '@material-ui/lab/Alert';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from 'react-router-dom';
 class Login extends Component {
     state = {
@@ -40,7 +39,6 @@ class Login extends Component {
     }
 
     toggle = () => {
-        console.log('toggle')
         this.setState({
             modal: !this.state.modal
         })
@@ -66,9 +64,7 @@ class Login extends Component {
         return (
             
             <Container className="h-100">
-{console.log(this.props.error)}
  {localStorage.getItem('userRole') ==  'ROLE_USER' || localStorage.getItem('userRole') ==  'ROLE_ONDERAANNEMER'? <Redirect to ="/"/> : null }  
-{console.log(this.props.auth.userRole)}
  {this.props.auth.isAuthenticated && localStorage.getItem('userRole') == "ROLE_USER" || localStorage.getItem('userRole') ==  'ROLE_ONDERAANNEMER' ?<Alert severity="success">You are logged in!</Alert> : null } 
                         
                         <div className="row align-items-center">
@@ -76,11 +72,11 @@ class Login extends Component {
                                 <Card>
                                     <CardBody>
                                     {this.props.error.id == 'LOGIN_FAIL' ? ( <Alert severity="error"> {this.props.error.msg.data.message} </Alert> ): null }
-                                    {this.props.error.id == 'LOGIN_WRONGROLE' ? ( <Alert severity="error"> {this.props.error.msg} </Alert> ): null }
+                                    {this.props.error.id == 'LOGIN_WRONGROLE' ? ( <Alert severity="error"> {console.log(this.props.error.msg)} </Alert> ): null }
                         <h1>Aanmelden</h1>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for="name">Username</Label>
+                                <Label for="username">Username</Label>
                                 <Input
                                     type="text"
                                     name="username"
@@ -90,7 +86,7 @@ class Login extends Component {
                                     required
                                     onChange={this.onChange}
                                 />
-                                <Label for="name">Password</Label>
+                                <Label for="password">Password</Label>
                                 <Input
                                     type="password"
                                     name="password"
@@ -107,7 +103,6 @@ class Login extends Component {
                                     disabled={this.props.auth.isLoading}
                                 > {this.props.auth.isLoading ? 'Loading...' : 'Login' }
                                 </Button>
-                                {console.log(this.props.auth.isLoading)}
                             </FormGroup>
                         </Form>
                         </CardBody>

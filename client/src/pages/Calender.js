@@ -12,9 +12,7 @@ import {
   Toolbar,
   DateNavigator,
   ViewSwitcher,
-  AllDayPanel,
   AppointmentTooltip,
-  AppointmentForm,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import Grid from '@material-ui/core/Grid';
 import Room from '@material-ui/icons/Room';
@@ -138,14 +136,14 @@ class Calender extends Component {
         }
     }
     componentDidMount(){
-        console.log(this.state.currentDate, 'datum')
+   
         let startdate = moment(this.state.currentDate).subtract(1, 'days').format('YYYY-MM-DD');
         let enddate = moment(this.state.currentDate).add(1, 'days').format('DD-MM-YYYY');
         let url = '&date[strictly_after]=' + startdate + '&date[strictly_before]=' + enddate
         this.props.getItemsDate(url)
     }
     currentViewNameChange = (currentViewName) => {
-        console.log(this.state.currentViewName, currentViewName)
+       
         this.setState({ currentViewName: currentViewName }, function(){
           if(this.state.currentViewName == 'Week'){
             let beginWeek =   moment(this.state.currentDate).startOf('week').format('YYYY-MM-DD') ;
@@ -167,22 +165,19 @@ class Calender extends Component {
 
       };
     setCorrect = () => {
-        console.log(this.state.currentDate, 'datum2')
+       
         this.setState({
             data: []
         }, function(){
             if(this.state.makeData){
 
                 this.props.item.calendarItems['hydra:member'].map(m => {
-/*                   let endtime = moment(m.date).format('YYYY-MM-DD') + 'T' +  m.stop).diff(moment(m.pauze));
-                  console.log(endtime,"endtime", m.stop, m.pauze) */
+
                   let calcpauze = new Date (moment(m.date).format('YYYY-MM-DD') + 'T' + m.pauze);
                   let calcStart = new Date(moment(m.date).format('YYYY-MM-DD') + 'T' + m.stop)
                   let hours = calcStart.setHours(calcStart.getHours() + calcpauze.getHours())
-                  console.log(calcStart.getHours() + calcpauze.getHours())
+                 
                   let minutes = calcStart.setMinutes(calcStart.getMinutes() + calcpauze.getMinutes())
-                  console.log(calcStart.getMinutes() , calcpauze.getMinutes())
-                  console.log(hours + minutes)
                   let total = hours + minutes
                   let item = {
                     "id" : m.id,
@@ -222,9 +217,9 @@ class Calender extends Component {
     }
 
     currentDateChange = (currentDate) => {
-        console.log(this.state.currentDate,currentDate, 'datum 3')
+       
         let date = moment(currentDate).format('YYYY-MM-DD')
-        console.log(date, 'date 3')
+       
         let startdate = moment(date).subtract(1, 'days').format('YYYY-MM-DD');
         let enddate = moment(date).add(1, 'days').format('DD-MM-YYYY');
         
@@ -232,7 +227,7 @@ class Calender extends Component {
         this.setState({ currentDate : date });
 
          if(this.state.currentViewName == 'Week'){
-             console.log('viewname is week')
+            
           let beginWeek =   moment(currentDate).startOf('week').format('YYYY-MM-DD');
           let endWeek =   moment(currentDate).endOf('week').format('YYYY-MM-DD');
           let url = '&date[after]=' + beginWeek + '&date[before]=' + endWeek
@@ -242,7 +237,7 @@ class Calender extends Component {
           })
          }else if (this.state.currentViewName == "Day"){
 
-            console.log('get new data')
+            
             let url = '&date[strictly_after]=' + startdate + '&date[strictly_before]=' + enddate
             this.props.getItemsDate(url)
 
@@ -269,25 +264,18 @@ class Calender extends Component {
               hoursworked: 0,
               hourspauze: 0
           }, function(){
-            console.log('calc stats', this.state.data)
+           
             let uren = 0
             let pauze = 0
             this.state.data.map(m => {
-                console.log(m)
-              /*   console.log(m.calcstart.addHours(m.calcpauze.getHours()),'calc pauze') */
                 uren = uren + moment(m.endDate).diff(moment(m.calcstart))
                 pauze = pauze + moment(m.pauze).diff(moment(m.zerodate))
-                console.log('PAUZE',m.pauze, moment(m.pauze), pauze)
-               console.log(m.calcstart, m.endDate)
-                console.log(pauze, 'pauze')
-                console.log('uurkes',uren, this.state.hoursworked + uren)
-                console.log(moment(uren).format('H-m-s'))
-                console.log(moment(pauze).format('H-m-s'))
+                
                 this.setState({
                     hoursworked: this.convertMS(uren),
                     hourspauze: this.convertMS(pauze),
                 }, function(){
-                    console.log('states after fix', this.state.hoursworked, this.state.hourspauze)
+                   
                 })
             })
           })
@@ -295,7 +283,7 @@ class Calender extends Component {
       }
 
     convertMS = ( milliseconds )  => {
-      console.log(milliseconds)
+     
         var day = 0, hour = 0, minute = 0, seconds = 0;
         seconds = Math.floor(milliseconds / 1000);
         minute = Math.floor(seconds / 60);
@@ -329,7 +317,7 @@ class Calender extends Component {
                     </div>     
                 <Paper>
                     { this.props.item.calendarItems['hydra:totalItems'] >= 0 && this.state.makeData ?  this.setCorrect() : null }
-                    {console.log('data',this.state.data, 'date', this.state.currentDate,)}
+                   
                     { this.state.makeData && this.state.data ? <Spinner /> :
                    
                     <Scheduler

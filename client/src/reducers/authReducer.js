@@ -31,7 +31,6 @@ export default function (state = initialState, action ){
                 isLoading: true,
             };
         case USER_LOADED:
-            console.log('roles',action.payload.roles)
             localStorage.setItem('id', action.payload.id);
             return {
                 ...state,
@@ -43,7 +42,6 @@ export default function (state = initialState, action ){
 
         case LOGIN_TOKEN:
             localStorage.setItem('token', action.payload.token);
-            // console.log(action.payload.token)
             return {
                 ...state,
                 ...action.payload,
@@ -62,8 +60,6 @@ export default function (state = initialState, action ){
                 loading: false,
             }
         case LOGIN_SUCCES:
-            // console.log(action.payload.email)
-            console.log('login succes', action.payload)
             localStorage.setItem('user-email', action.payload.email);
             localStorage.setItem('id', action.payload.id);
             localStorage.setItem('username', action.payload.username);
@@ -86,7 +82,6 @@ export default function (state = initialState, action ){
         case LOAD_FAIL:
         case AUTH_ERROR:
         case LOGIN_FAIL:
-            console.log('logout delete everything')
             localStorage.removeItem('user-email');
             localStorage.removeItem('id');
             localStorage.removeItem('username');
@@ -101,7 +96,6 @@ export default function (state = initialState, action ){
                 userRole: null,
             };
         case LOGOUT_SUCCESS:
-                console.log('logout delete everything')
                 localStorage.removeItem('user-email');
                 localStorage.removeItem('id');
                 localStorage.removeItem('username');

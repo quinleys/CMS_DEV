@@ -27,7 +27,6 @@ class ClientCard extends Component {
           <div className="col-12">
      
             <Card className='my-3' >
-              {console.log(this.props.materials)}
               {this.props.item.loading ? <Spinner /> : 
               <div> 
             <CardContent>

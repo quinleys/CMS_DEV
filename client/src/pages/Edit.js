@@ -9,6 +9,7 @@ import Switch from '@material-ui/core/Switch';
 import Spinner from '../components/Loading/Spinner'
 import moment from 'moment';
 import Card from '@material-ui/core/Card';
+import {Redirect} from 'react-router-dom'
 import Alert from '@material-ui/lab/Alert';
 class Edit extends Component {
     state = {
@@ -55,14 +56,11 @@ class Edit extends Component {
         }
     }
     selectChange = (e) => {
-        console.log('select', e)
         if(e){
             this.setState({
                 materials: []
             },function(){
-                console.log('eee', e)
                 e.map( m => {
-                    console.log('mmm',m)
                     let item = "/api/materials/" + m.id;
                     if(this.state.materials.includes(item)){
                         this.setState({materials: this.state.materials.filter(function(filter) { 
@@ -79,10 +77,7 @@ class Edit extends Component {
         }
     }
     setCorrect = () => {
-        console.log('set correct',this.props.item.item)
         if(this.props.item.item["@type"] == "Post"){
-            console.log('set correct 2',this.props.item.item)
-            console.log('period', this.props.item.item.period)
         this.setState({
             title: this.props.item.item.title,
             description: this.props.item.item.description,
@@ -116,7 +111,6 @@ class Edit extends Component {
                     }
                 })
             }
-            console.log(this.props.item.item.customer.id, 'id customer')
             this.props.getPeriods(this.props.item.item.customer.id)
             this.setState({
                 loaded: true
@@ -133,7 +127,6 @@ class Edit extends Component {
             let start;
             let pauze 
             let end 
-            console.log(this.state.date, this.state.start, this.state.pauze, this.state.stop)
             if(this.state.start.length != 8){
                 start = new Date(this.state.date  + 'T' + this.state.start + ':00')
             }else {
@@ -152,8 +145,6 @@ class Edit extends Component {
       
         let calc = end - start
         let newpauze = pauze - new Date( this.state.date + 'T' + '00:00:00')
-
-        console.log('calc' , calc,newpauze,  calc > newpauze)
         if(calc,newpauze,  calc > newpauze ){
 
 
@@ -204,7 +195,6 @@ class Edit extends Component {
         })
     }
     onChange = (e) => {
-        console.log([e.target.name],e.target.value)
          let name = e.target.name
         if(e.target.name == 'transport' ){
             let value = parseInt(e.target.value)
@@ -220,15 +210,15 @@ class Edit extends Component {
         this.setState({ [e.target.name] : e.target.value}, function(){
             if(name == 'customer'){
                 this.props.getPeriods(this.state.customer)
-                console.log('this.getPeriods')
             }
         })
         }
     }
     render() {
         return (
+            this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
             <Container>
-                {this.props.item.loading  && this.props.item.customersloading  ? <Spinner/>: 
+                {this.props.item.loading  && this.props.item.customersloading && this.props.item.item.materials ? <Spinner/>: 
              this.props.error.notAllowed ? 'NOT ALLOWED' : 
              !this.state.loaded? <div> {this.setCorrect()} <Spinner/> </div>: 
             <div>
@@ -250,9 +240,8 @@ class Edit extends Component {
                 />
                 </div>
                 </div>
-                {console.log(this.state.date)}
                             <FormGroup>
-                                <Label for="item">Title</Label>
+                                <Label for="title">Title</Label>
                                 <Input
                                     type="text"
                                     name="title"
@@ -263,7 +252,7 @@ class Edit extends Component {
                                     required
                                     className="mb-2"
                                 />
-                                <Label for="item">Uitgevoerde Activiteiten</Label>
+                                <Label for="description">Uitgevoerde Activiteiten</Label>
                                 <Input
                                     type="textarea"
                                     name="description"
@@ -299,7 +288,7 @@ class Edit extends Component {
                                     />
                                 </FormGroup>
                                 <FormGroup>
-                                    <Label for="start">Stop</Label>
+                                    <Label for="stop">Stop</Label>
                                     <Input
                                     type="time"
                                     name="stop"
@@ -310,7 +299,7 @@ class Edit extends Component {
                                     placeholder="time placeholder"
                                     />
                                 </FormGroup>
-                                <Label for="item">Transport (in km)</Label>
+                                <Label for="transport">Transport (in km)</Label>
                                 <Input
                                     type="number"
                                     name="transport"
@@ -322,7 +311,7 @@ class Edit extends Component {
                                     className="mb-2"
                                     
                                 /> 
-                                <Label for="item">Pauze</Label>
+                                <Label for="pauze">Pauze</Label>
                                 <Input
                                     type="time"
                                     name="pauze"
@@ -336,14 +325,11 @@ class Edit extends Component {
                                 />
                                 <Label for="customer">Customer</Label>
                                 <Input type="select" name="customer" id="customer" className="mb-2" value={this.state.customer} onChange={this.onChange}>
-                                    {console.log(this.props.item.customers['hydra:member'])}
                                   { this.props.item.customers && this.props.item.customers['hydra:totalItems'] >= 1 ? this.props.item.customers['hydra:member'].map(item => {
                                     return(<option key={item.id} value={item.id} >{item.name}</option>)
                                 }) : <option>Loading...</option> }  
                                 </Input>
                                 <Label for="period">Periode</Label>
-                                {console.log("periods",this.props.item.periods, this.state.customer)}
-                                {console.log(this.state.period, this.state.customer)}
                                 <Input type="select" disabled={this.state.customer == ""} name="period" id="period" value={this.state.period} className="mb-2" onChange={this.onChange}>
                                     {this.state.period == 0 ? <option value="">Kies een periode</option> : null}
                                   { !this.props.item.periodsloading && this.props.item.periods.length >= 1 && this.props.item.periods !== 'no periods' ? this.props.item.periods.map(item => {
@@ -351,7 +337,7 @@ class Edit extends Component {
                                 }) : <option>Selecteer een klant...</option> }  
                                 </Input>
                                <Label for="materials">Benodigdheden</Label>
-                               {console.log(this.props.item.item.materials,'materials')}
+                            
                                { this.props.item.materials && this.props.item.materials['hydra:totalItems'] >= 1 ?
                                <Select options={this.props.item.materials['hydra:member']} 
                                         isMulti

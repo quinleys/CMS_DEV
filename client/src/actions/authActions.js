@@ -6,20 +6,22 @@ import { USER_LOADED, PROFILE,LOAD_FAIL,PROFILE_FAIL,UPDATE_PROFILE,  USER_LOADI
 // check token & load user
 export const loadUser = () => (dispatch) => {
     // User Loading
-    dispatch({type: USER_LOADING});
-    
+
+    if(localStorage.getItem('id') !== null){
+
+        dispatch({type: USER_LOADING});
     axios.get('https://127.0.0.1:8000/api/users/' + localStorage.getItem('id'), { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
         .then(res => dispatch({
             type: USER_LOADED,
             payload: res.data
         }))
         .catch(err => {
-            console.log('we zijn hier')
             dispatch(returnLoadUser(err.response, err.response));
             dispatch({
                 type: LOAD_FAIL
             })
         })
+    }
 }
 
 export const getProfile = () => (dispatch) => {
@@ -30,7 +32,6 @@ export const getProfile = () => (dispatch) => {
         type: PROFILE,
         payload: res.data
     })).catch(err => {
-        console.log('we zijn hier')
         dispatch(returnErrors(err.response, err.response));
         dispatch({
             type: PROFILE_FAIL
@@ -39,7 +40,6 @@ export const getProfile = () => (dispatch) => {
 }
 export const updateProfile = (item) => (dispatch) => {
     dispatch({type: USER_LOADING});
-    console.log(item)
     axios.put('https://127.0.0.1:8000/api/users/' + localStorage.getItem('id'), item, { headers: { Authorization: "Bearer " + localStorage.getItem('token') }})
     .then(res => {
       
@@ -49,7 +49,6 @@ export const updateProfile = (item) => (dispatch) => {
     })
     toast.success('🥳 Update succesvol');
 }).catch( err => {
-        console.log(err.response)
         dispatch(failedProfile(err.response.data.response, err.response));
         dispatch({
             type: PROFILE_FAIL
@@ -72,14 +71,11 @@ export const login = ({username, password}) => (dispatch) => {
     dispatch(clearErrors())
     axios.post('https://127.0.0.1:8000/api/login_check', body, config)
     .then(res => {
-        console.log(res.data.token)
-        console.log(res)
         dispatch({
         type: LOGIN_TOKEN,
         payload: res.data
     })})
     .catch(err => {
-        console.log('we zijn hier')
         dispatch(returnErrors(err.response, err.response, 'LOGIN_FAIL'));
         dispatch({
             type: LOGIN_FAIL
@@ -87,13 +83,9 @@ export const login = ({username, password}) => (dispatch) => {
     }).then(() => {
         axios.get('https://127.0.0.1:8000/api/users/',{ headers: { Authorization: "Bearer " + localStorage.getItem('token')} })
         .then(res => {
-            console.log(res);
-            // console.log(res.data['hydra:member'])
             res.data['hydra:member'].forEach(element => {
-                // console.log(element.username)
-                
                 if(element.username === username){
-                    console.log('element',element.roles)
+
                     if(element.roles == 'ROLE_USER' || element.roles == "ROLE_ONDERAANNEMER"){
                         dispatch({
                             type: LOGIN_SUCCES,
@@ -120,7 +112,6 @@ export const login = ({username, password}) => (dispatch) => {
 //logout user 
 
 export const logout = () => (dispatch) => {
-    console.log('log out ')
     dispatch({
  
         type: LOGIN_FAIL

@@ -44,7 +44,6 @@ class AppNavbar extends Component {
         });
     }
     handleClick = (e) => {
-        console.log(e.target)
         this.setState({
             achor: e.currentTarget
         })

@@ -2,17 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { getItems } from '../actions/itemActions';
 import PropTypes from 'prop-types';
-import ItemModal from '../components/Components/ItemModal';
-import { Container } from 'reactstrap';
-import { getMaterials, getCustomers, loadNextPage } from '../actions/itemActions';
-import Spinner from '../components/Loading/Spinner';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-import ListItem from '../components/Components/ListItem';
-import PostCard from '../components/Components/PostCard'
-import Alert from '@material-ui/lab/Alert';
-import Pagination from "react-js-pagination";
-import {Redirect} from 'react-router-dom'
-import moment from 'moment'
+import { loadNextPage } from '../actions/itemActions';
+
 class Clients extends Component {
     state= {
         allMaterials: this.props.materials,
