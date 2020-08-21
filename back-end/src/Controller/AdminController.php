@@ -114,8 +114,6 @@ class AdminController extends EasyAdminController
          $dompdf = new Dompdf($pdfOptions);
          
          $em = $this->getDoctrine()->getManager();
-
-    
          
          $retrievedPeriods = $em->getRepository(Period::class)->findOneBy([
              'id' => $id
@@ -180,7 +178,7 @@ class AdminController extends EasyAdminController
              } 
          } 
           // Retrieve the HTML generated in our twig file
-          $html = $this->renderView('pdf/new.html.twig', [
+          $html = $this->renderView('pdf/period.html.twig', [
            'period' => $retrievedPeriods,
             'customer' => $retrievedPeriods->getCustomer(),
             'posts' => $retrievedPosts,
@@ -190,8 +188,9 @@ class AdminController extends EasyAdminController
             'totalpricekm' => $totalpricekm,
             'priceToPay' => $totalPrice + $totalpricekm 
         ]);
-        
-        
+      
+        $html .= ' <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">';
+
         // Load HTML to Dompdf
         $dompdf->loadHtml($html);
         
@@ -205,9 +204,15 @@ class AdminController extends EasyAdminController
         $dompdf->stream("period.pdf", [
             "Attachment" => true
         ]);
-        $this->addFlash('success', 'Pdf gedownload');
        
-        return $this->redirectToRoute('calculate',array('id' => $id));
+        dd($dompdf); 
+
+        $this->addFlash('success', 'Pdf gedownload');
+        return $this->render('backend/calculate.html.twig', [
+            'id' => $id,
+        ]);
+
+     /*    return $this->redirectToRoute('calculate',array('id' => $id));  */
         
          /* return $this->redirectToRoute('detail',array('id' => $id)); */
     }

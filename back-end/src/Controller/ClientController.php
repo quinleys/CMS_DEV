@@ -390,6 +390,7 @@ class ClientController extends AbstractController
             'priceToPay' => $totalPrice + $totalpricekm
         ]);
         $this->addFlash('success', 'Pdf gedownload');
+        
          /* return $this->redirectToRoute('detail',array('id' => $id)); */
     }
 
