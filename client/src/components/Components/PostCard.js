@@ -61,12 +61,12 @@ class PostCard extends Component {
               {this.props.customer}
               </Typography>
            
-              <Typography variant="body2" component="p" className="mt-2">
+              
             {this.props.materials.length == 0 ?  <Chip className="mr-1" label={'Geen materialen'}  /> : null}
                {this.props.materials.map(m => 
                    <Chip key={m.id} className="mr-1" label={m.name}  />
                 )}
-              </Typography>
+             
             </CardContent>
             <CardActions>
             <Link className="w-100 text-white" to={{
