@@ -22,6 +22,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { Divider } from '@material-ui/core';
 import TodayIcon from '@material-ui/icons/Today';
 import { logout } from '../../actions/authActions';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 class AppNavbar extends Component {
     state = {
         isOpen: false,
@@ -30,7 +31,9 @@ class AppNavbar extends Component {
     }
     componentWillUnmount(){
         this.setState = {
-            isOpen: false
+            isOpen: false,
+            menu: false,
+            achor: null,
         }
     }
        
@@ -55,6 +58,17 @@ class AppNavbar extends Component {
             menu: !this.state.menu
         })
     }
+    logout = () => {
+        this.props.logout()
+        console.log('logout')
+        this.setState({
+            isOpen: false,
+        }, function(){
+            
+            console.log(this.state.isOpen)
+        })
+        
+    }
     render() {
         const { isAuthenticated, user } = this.props.auth;
 
@@ -75,7 +89,9 @@ class AppNavbar extends Component {
                     >
                     <MenuItem className="my-2" onClick={() => this.togglemenu()}> <Link to="/profile"> <PersonIcon /> Profiel</Link></MenuItem>
                     <MenuItem className="my-2" onClick={() => this.togglemenu()}> <Link to="/calendar"> <TodayIcon /> Kalender</Link></MenuItem>
-                    <MenuItem onClick={() => this.togglemenu(), () => this.props.logout() }><Logout /></MenuItem>
+                    <MenuItem onClick={() => this.logout() }>  <Link to="/login">
+                <ExitToAppIcon /> Logout
+                </Link></MenuItem>
                     </Menu>
                     </div>
                     <div className="d-sm-block d-md-none">
@@ -95,8 +111,14 @@ class AppNavbar extends Component {
                         </NavLink>
                         </NavItem>
                         <Divider />
-                       
-                      <Logout onClick={() => this.togglemenu(), () => this.props.logout() } />
+                        <NavItem onClick={() => this.logout() } className="my-2">
+                            <NavLink  >
+                    
+                        <h6><ExitToAppIcon className="my-auto"/>  Logout</h6>
+                        
+                        </NavLink>
+                        </NavItem>
+                      {/* <Logout onClick={() => this.logout() } /> */}
                    
                     </div>
             </Fragment>
@@ -105,14 +127,19 @@ class AppNavbar extends Component {
         return (
             
             <Navbar color="dark" dark expand="md" className="mb-2">
+                {console.log('Navbar', this.state.isOpen)}
                 <Container>
                 <NavbarBrand href="/">CMS-DEV</NavbarBrand>
-                <NavbarToggler onClick={this.toggle} />
+                { isAuthenticated ? 
+                <Fragment>
+                <NavbarToggler onClick={() => this.toggle()} />
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         { isAuthenticated ? authLinks : null}
                     </Nav>
                 </Collapse>
+                </Fragment>
+                : null }
                 </Container>
             </Navbar>
         )
