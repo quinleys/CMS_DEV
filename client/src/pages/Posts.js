@@ -44,7 +44,6 @@ class Posts extends Component {
         return (
           <div>
             {this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> : null }
-            {console.log(!loading , this.props.item.items.status == 200 , !this.props.item.customersloading, !this.props.item.materialsloading )}
                 { !loading && this.props.item.items.status == 200  && !this.props.item.customersloading && !this.props.item.materialsloading ?
                 <Container>
                     <ItemModal />

@@ -22,10 +22,6 @@ import Calendar from './pages/Calender';
 import Edit from './pages/Edit'
 class App extends Component {
   componentDidMount(){
-    console.log('token',localStorage.getItem('token'))
-    console.log('user', localStorage.getItem('username'))
-    console.log('auth', localStorage.getItem('authenticated'))
-
     store.dispatch(loadUser()); 
     store.dispatch(getMaterials());
     store.dispatch(getCustomers());
@@ -35,7 +31,6 @@ class App extends Component {
   render(){
   return (
     <Provider store={store}>
-      {console.log(this.props.error)}
     <Router>
     <div>
       <AppNavbar />

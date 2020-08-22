@@ -60,12 +60,8 @@ class AppNavbar extends Component {
     }
     logout = () => {
         this.props.logout()
-        console.log('logout')
         this.setState({
             isOpen: false,
-        }, function(){
-            
-            console.log(this.state.isOpen)
         })
         
     }
@@ -127,7 +123,6 @@ class AppNavbar extends Component {
         return (
             
             <Navbar color="dark" dark expand="md" className="mb-2">
-                {console.log('Navbar', this.state.isOpen)}
                 <Container>
                 <NavbarBrand href="/">CMS-DEV</NavbarBrand>
                 { isAuthenticated ? 
