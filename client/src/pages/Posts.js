@@ -44,9 +44,9 @@ class Posts extends Component {
         return (
           <div>
             {this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> : null }
+            {console.log(!loading , this.props.item.items.status == 200 , !this.props.item.customersloading, !this.props.item.materialsloading )}
                 { !loading && this.props.item.items.status == 200  && !this.props.item.customersloading && !this.props.item.materialsloading ?
                 <Container>
-             
                     <ItemModal />
                     <div className="row">
                         <div className="col-12">
@@ -59,7 +59,7 @@ class Posts extends Component {
                         return(
                             <PostCard key={m.id} id={m.id} date={m.date} customer={m.customer.name} finished={m.finished} title={m.title} description={m.description} materials={m.materials}/>
                         )})}  
-                        {this.props.item.items.data["hydra:totalItems"] == 0 ? <p>Geen werkbonnen</p>: null}
+                        {this.props.item.items.data["hydra:totalItems"] == 0 ? 'Geen werkbonnen': null}
                      {this.props.item.items.data["hydra:totalItems"] > 10 ? 
                      <div className="col-12">
                      <Pagination
@@ -75,7 +75,7 @@ class Posts extends Component {
                     : null }
                    
                 </Container>
-                :  <Spinner /> }
+                : <div className={!loading && this.props.item.items.status == 200  && !this.props.item.customersloading && !this.props.item.materialsloading ? 'd-none' : null }> <Spinner toggle={loading}/> </div>}
                 </div>
         )
     }

@@ -64,7 +64,7 @@ class PostCard extends Component {
               <Typography variant="body2" component="p" className="mt-2">
             {this.props.materials.length == 0 ?  <Chip className="mr-1" label={'Geen materialen'}  /> : null}
                {this.props.materials.map(m => 
-                   <Chip className="mr-1" label={m.name}  />
+                   <Chip key={m.id} className="mr-1" label={m.name}  />
                 )}
               </Typography>
             </CardContent>

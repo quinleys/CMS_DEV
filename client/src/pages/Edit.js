@@ -280,9 +280,9 @@ class Edit extends Component {
         return (
             this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
             <Container>
-                {this.props.item.loading  && this.state.loading &&  this.props.item.customersloading && this.props.item.item.materials ? <Spinner/> : 
+                {this.props.item.loading  && this.state.loading &&  this.props.item.customersloading && this.props.item.item.materials ? <Spinner toggle={true}/> : 
              this.props.error.notAllowed ? 'NOT ALLOWED' : 
-             !this.state.loaded  && this.state.loading? <div> {this.setCorrect()} <Spinner/> </div>: 
+             !this.state.loaded  && this.state.loading? <div> {this.setCorrect()} <Spinner toggle={true}/> </div>: 
             <div>
               {this.props.item.item.customers && !this.loadedcustomers  ? this.loadCustomers() : null}
               <Card className="p-3 my-3" style={{ color: "white"}}>

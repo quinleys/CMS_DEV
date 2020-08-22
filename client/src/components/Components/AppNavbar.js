@@ -96,7 +96,7 @@ class AppNavbar extends Component {
                         </NavItem>
                         <Divider />
                        
-                      <Logout />
+                      <Logout onClick={() => this.togglemenu(), () => this.props.logout() } />
                    
                     </div>
             </Fragment>

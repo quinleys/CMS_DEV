@@ -18,9 +18,11 @@ export default class Spinner extends Component {
      
       render() {
         return (
+           this.props.toggle ? 
           <div className="col-12 text-center">
             <CircularProgress style={{color: "#9147FF"}} className=" m-auto" />
           </div>
+          : null
         );
       }
 }
