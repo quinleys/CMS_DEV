@@ -17,8 +17,8 @@
   <li class="list-group-item">Periode informatie: {{ period.title}}, periode: {{ period.startDate|date('Y-m-d') }} - {{ period.endDate|date('Y-m-d') }}</li>
   <li class="list-group-item">Klanten informatie: {{ period.getCustomer().name }}, adres: {{ period.getCustomer().adress }}, telefoon: {{ period.getCustomer().phone }} </li>
   <li class="list-group-item">Aantal opdracht: {{period.getPosts().count()}} </li>
-  <li class="list-group-item">Totaal aantal gepresteerde uren: {{timeworked|date('H')}} uren {{timeworked|date('i')}} minuten {{timeworked|date('s')}} seconden </li>
-  <li class="list-group-item">Prijs voor gepresteerde uren: {{totalprice}} </li>
+  <li class="list-group-item">Totaal aantal gepresteerde uren: {{ hoursworked }} uren minuten seconden </li>
+  <li class="list-group-item">Prijs voor gepresteerde uren: {{totalprice }} </li>
    <li class="list-group-item">Totaal aantal kilometers: {{totalKm}}</li>
     <li class="list-group-item">Prijs voor kilometers: {{totalpricekm}} </li>
     <li class="list-group-item"><h4>Total Prijs </h4> </li>

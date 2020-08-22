@@ -143,6 +143,11 @@ class ClientController extends AbstractController
         $totalPrice= 0;
         $totalKm = 0;
         $totalpricekm = 0;
+
+        $hourscalculation = 0;
+        $minutescalculation = 0;
+        $secondescalculation = 0;
+
         // calc all information needed
         foreach ($retrievedPosts as $post)
         {
@@ -160,7 +165,15 @@ class ClientController extends AbstractController
                 
                 $diff = $stop->diff($start);
       
-               
+                $hourscalculation = $hourscalculation +  $diff->h;
+                
+                $minutescalculation = $minutescalculation + $diff->i;
+                if($minutescalculation >= 60){
+                    $minutescalculation =  $minutescalculation - 60;
+                    $hourscalculation =   $hourscalculation + 1;
+                }
+                $secondescalculation = $secondescalculation + $diff->s;
+
                 $totalTime->add($diff);
                 
                 // calc price
@@ -225,12 +238,12 @@ class ClientController extends AbstractController
                 }
             } 
         } 
-        
+          $timeworkedtest = $hourscalculation .':'. $minutescalculation .':' . $secondescalculation;
         return $this->render('client/detail.html.twig', [
                     'posts' => $retrievedPosts,
                     'period' => $retrievedPeriods,
                     'user' => $user,
-                    'timeworked' => $totalTime,
+                    'timeworked' => $timeworkedtest,
                     'totalprice' => $totalPrice,
                     'totalKm' => $totalKm,
                     'totalpricekm' => $totalpricekm,
@@ -270,6 +283,12 @@ class ClientController extends AbstractController
          $totalKm = 0;
          $totalpricekm = 0;
          // calc all information needed
+
+         $hourscalculation = 0;
+         $minutescalculation = 0;
+         $secondescalculation = 0;
+
+
          foreach ($retrievedPosts as $post)
          {
             if($post->getStop()){
@@ -285,7 +304,15 @@ class ClientController extends AbstractController
                 /* dd($start); */
                 
                 $diff = $stop->diff($start);
-      
+                
+                $hourscalculation = $hourscalculation +  $diff->h;
+                
+                $minutescalculation = $minutescalculation + $diff->i;
+                if($minutescalculation >= 60){
+                    $minutescalculation =  $minutescalculation - 60;
+                    $hourscalculation =   $hourscalculation + 1;
+                }
+                $secondescalculation = $secondescalculation + $diff->s;
                
                 $totalTime->add($diff);
                 
@@ -351,13 +378,15 @@ class ClientController extends AbstractController
                 }
              } 
          } 
+
+         $timeworkedtest = $hourscalculation .':'. $minutescalculation .':' . $secondescalculation;
           // Retrieve the HTML generated in our twig file
           $html = $this->renderView('pdf/period.html.twig', [
             'period' => $retrievedPeriods,
             'customer' => $user->getCustomer(),
             'posts' => $retrievedPosts,
             'user' => $user,
-            'timeworked' => $totalTime,
+            'timeworked' => $timeworkedtest,
             'totalprice' => $totalPrice,
             'totalKm' => $totalKm,
             'totalpricekm' => $totalpricekm,

@@ -70,10 +70,14 @@ class AdminController extends EasyAdminController
 
         $diff = 0;
         $totalTime = new DateTime('00:00:00');
+
         $totalPrice= 0;
         $totalKm = 0;
         $totalpricekm = 0;
-
+        
+        $hourscalculation = 0;
+        $minutescalculation = 0;
+        $secondescalculation = 0;
         foreach ($retrievedPosts as $post)
          {
             if($post->getStop()){
@@ -86,11 +90,22 @@ class AdminController extends EasyAdminController
             
                 $stop = new DateTime($post->getStop());
                 $start = new DateTime($result);
+
                 /* dd($start); */
                 
                 $diff = $stop->diff($start);
-      
-               
+
+                $hourscalculation = $hourscalculation +  $diff->h;
+                
+                $minutescalculation = $minutescalculation + $diff->i;
+                if($minutescalculation >= 60){
+                    $minutescalculation =  $minutescalculation - 60;
+                    $hourscalculation =   $hourscalculation + 1;
+                }
+                $secondescalculation = $secondescalculation + $diff->s;
+
+
+            
                 $totalTime->add($diff);
                 
                 // calc price
@@ -155,12 +170,12 @@ class AdminController extends EasyAdminController
                 }
              } 
          } 
-
+        $timeworkedtest = $hourscalculation .':'. $minutescalculation .':' . $secondescalculation;
         return $this->render('backend/calculate.html.twig', [
             'period' => $retrievedPeriods,
             'posts' => $retrievedPosts,
             'period' => $retrievedPeriods,
-            'timeworked' => $totalTime,
+            'hoursworked' => $timeworkedtest,
             'totalprice' => $totalPrice,
             'totalKm' => $totalKm,
             'totalpricekm' => $totalpricekm,
@@ -192,6 +207,11 @@ class AdminController extends EasyAdminController
          $totalPrice= 0;
          $totalKm = 0;
          $totalpricekm = 0;
+
+         $hourscalculation = 0;
+         $minutescalculation = 0;
+         $secondescalculation = 0;
+         
          // calc all information needed
          foreach ($retrievedPosts as $post)
          {
@@ -208,7 +228,15 @@ class AdminController extends EasyAdminController
                 /* dd($start); */
                 
                 $diff = $stop->diff($start);
-      
+                
+                $hourscalculation = $hourscalculation +  $diff->h;
+                
+                $minutescalculation = $minutescalculation + $diff->i;
+                if($minutescalculation >= 60){
+                    $minutescalculation =  $minutescalculation - 60;
+                    $hourscalculation =   $hourscalculation + 1;
+                }
+                $secondescalculation = $secondescalculation + $diff->s;
                
                 $totalTime->add($diff);
                 
@@ -274,12 +302,13 @@ class AdminController extends EasyAdminController
                 }
              } 
          } 
+         $timeworkedtest = $hourscalculation .':'. $minutescalculation .':' . $secondescalculation;
           // Retrieve the HTML generated in our twig file
           $html = $this->renderView('pdf/period.html.twig', [
            'period' => $retrievedPeriods,
             'customer' => $retrievedPeriods->getCustomer(),
             'posts' => $retrievedPosts,
-            'timeworked' => $totalTime,
+            'timeworked' => $timeworkedtest,
             'totalprice' => $totalPrice,
             'totalKm' => $totalKm,
             'totalpricekm' => $totalpricekm,
@@ -372,6 +401,11 @@ class AdminController extends EasyAdminController
         $totalKm = 0;
         $totalpricekm = 0;
         // calc all information needed
+
+        $hourscalculation = 0;
+        $minutescalculation = 0;
+        $secondescalculation = 0;
+
         foreach ($retrievedPosts as $post)
         {
            if($post->getStop()){
@@ -388,7 +422,15 @@ class AdminController extends EasyAdminController
                
                $diff = $stop->diff($start);
      
-              
+               $hourscalculation = $hourscalculation +  $diff->h;
+                
+               $minutescalculation = $minutescalculation + $diff->i;
+               if($minutescalculation >= 60){
+                   $minutescalculation =  $minutescalculation - 60;
+                   $hourscalculation =   $hourscalculation + 1;
+               }
+               $secondescalculation = $secondescalculation + $diff->s;
+
                $totalTime->add($diff);
                
                // calc price
@@ -454,7 +496,7 @@ class AdminController extends EasyAdminController
             } 
         } 
             $spreadsheet = new Spreadsheet();
-            
+            $timeworkedtest = $hourscalculation .':'. $minutescalculation .':' . $secondescalculation;
             /* @var $sheet \PhpOffice\PhpSpreadsheet\Writer\Xlsx\Worksheet */
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'Periode Informatie');
