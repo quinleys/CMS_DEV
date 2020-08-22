@@ -149,17 +149,23 @@ class Edit extends Component {
               
             }
             if(this.props.item.item.materials){
+                console.log(this.props.item.item.materials)
                 this.props.item.item.materials.map(m => {
+                    console.log(m)
                     let item = "/api/materials/" + m.id;
                     if(this.state.materials.includes(item)){
-                        this.setState({materials: this.state.materials.filter(function(filter) { 
+                        console.log(this.props.item.item.materials)
+                        console.log(this.state.materials)
+                        /* this.setState({materials: this.state.materials.filter(function(filter) { 
                             return filter !== item
-                        })});
+                        })}); */
                       
                     }else{
                         this.setState(previousState => ({
                             materials: [...previousState.materials, item]
-                        }))
+                        }), function(){
+                            console.log(this.state.materials)
+                        })
                     }
                 })
             }
@@ -203,7 +209,7 @@ class Edit extends Component {
         let newpauze = pauze - new Date( this.state.date + 'T' + '00:00:00')
         if(calc,newpauze,  calc > newpauze ){
 
-
+            console.log('materials', this.state.materials)
         let newItem;
         if(this.state.period !== 0 ){
         newItem = {
