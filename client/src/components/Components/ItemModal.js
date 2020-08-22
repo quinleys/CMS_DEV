@@ -35,7 +35,7 @@ class ItemModal extends Component {
         error: PropTypes.object.isRequired
     }
      componentWillUnmount(){
-        console.log('unmount')
+       
         this.props.clearAddedsuccess()
         this.setState({
             modal: false,
@@ -59,7 +59,7 @@ class ItemModal extends Component {
         console.log('getperiodes')
     } */
     toggle = () => {
-        console.log('toggle')
+  
         this.setState({
             modal: !this.state.modal
         })
@@ -67,8 +67,7 @@ class ItemModal extends Component {
         /* this.loadCustomers() */
     }
     onChange = e => {
-        console.log(e.target.name, e.target.value, e.target.key, e.target.id)
-        console.log([e.target.name],e.target.value)
+
         let name = e.target.name
         if(e.target.name == 'transport'){
             let value = parseInt(e.target.value)
@@ -84,7 +83,7 @@ class ItemModal extends Component {
         this.setState({ [e.target.name] : e.target.value}, function(){
             if(name == 'customer'){
                 this.props.getPeriods(this.state.customer)
-                console.log('this.getPeriods')
+               
             }
         })
         
@@ -117,15 +116,15 @@ class ItemModal extends Component {
         }
     }
     selectChange = (e) => {
-        console.log('select', e)
+     
         if(e){
            
             this.setState({
                 materials: []
             },function(){
-                console.log('eee', e)
+        
                 e.map( m => {
-                    console.log('mmm',m)
+              
                     let item = "/api/materials/" + m.id;
                     if(this.state.materials.includes(item)){
                         this.setState({materials: this.state.materials.filter(function(filter) { 
@@ -185,7 +184,7 @@ class ItemModal extends Component {
             user: '/api/users/' + localStorage.getItem('id'),
         }
     }
-        console.log(newItem);
+
         this.props.addItem(newItem);  
     }else{
         this.setState({
@@ -210,10 +209,10 @@ class ItemModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                 > 
-                {console.log(this.props.item.succes, 'succes')}
+        
                     <ModalHeader toggle={this.toggle}>Voeg taak toe</ModalHeader>
                     <ModalBody>
-                        {console.log(this.state.error)}
+                   
                         {this.props.error.itemError ? <Alert  severity="error"> {this.props.error.itemError.data['hydra:description']} </Alert> : null }
                         {this.state.errormsg !== '' ? <Alert  severity="error"> {this.state.errormsg} </Alert> : null }
                         <Form onSubmit={this.onSubmit}>
@@ -342,14 +341,14 @@ class ItemModal extends Component {
                                 />
                                 <Label for="customer">Klanten</Label>
                                 <Input type="select" name="customer" id="customer" className="mb-2" onChange={this.onChange} required>
-                                    {console.log(this.props.item.customers['hydra:member'])}
+                                   
                                   {this.state.customer == "" ?  <option value="" >Kies een klant ...</option>: null}
                                   { !this.props.item.customersloading && this.props.item.customers && this.props.item.customers['hydra:totalItems'] >= 1 ? this.props.item.customers['hydra:member'].map(item => {
-                                    return(<option key={item.id} id={item.id}value={item.id} >{item.name} {console.log(item)}</option>)
+                                    return(<option key={item.id} id={item.id}value={item.id} >{item.name} </option>)
                                 }) : <option>Loading...</option> }  
                                 </Input>
                                 <Label for="period">Periode</Label>
-                                {console.log("periods",this.props.item.periods)}
+                               
                                 <Input type="select" disabled={this.state.customer == "" || this.props.item.periods == 'no periods'} name="period" id="period" className="mb-2" onChange={this.onChange} >
                                 {this.props.item.periods.length > 0 ? <option value="">Selecteer een periode...</option> : null }
                                   { !this.props.item.periodsloading && this.props.item.periods.length >= 1 && this.props.item.periods !== 'no periods' ? this.props.item.periods.map(item => {
@@ -358,7 +357,7 @@ class ItemModal extends Component {
                                 }) : this.props.item.periods == 'no periods' ? <option>Geen periodes</option> : <option>Selecteer een klant...</option> }  
                                 </Input>
                                <Label for="materials">Benodigdheden</Label>
-                               {console.log('materials',this.props.item.materials['hydra:member'])}
+                              
                               { this.props.item.materials && this.props.item.materials['hydra:totalItems'] >= 1 ?
                                <Select options={this.props.item.materials['hydra:member']} 
                                         isMulti
