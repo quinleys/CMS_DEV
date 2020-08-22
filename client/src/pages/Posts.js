@@ -42,9 +42,9 @@ class Posts extends Component {
         const { loading } = this.props.item;
 
         return (
-          
-            this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
-                !loading && this.props.item.items.status == 200  && this.props.item.customers !== [] ?
+          <div>
+            {this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> : null }
+                { !loading && this.props.item.items.status == 200  && !this.props.item.customersloading && !this.props.item.materialsloading ?
                 <Container>
              
                     <ItemModal />
@@ -57,7 +57,7 @@ class Posts extends Component {
                             {this.props.item.items && this.props.item.items.data["hydra:member"].map((m, i) => {
                            
                         return(
-                            <PostCard id={m.id} date={m.date} customer={m.customer.name} finished={m.finished} title={m.title} description={m.description} materials={m.materials}/>
+                            <PostCard key={m.id} id={m.id} date={m.date} customer={m.customer.name} finished={m.finished} title={m.title} description={m.description} materials={m.materials}/>
                         )})}  
                         {this.props.item.items.data["hydra:totalItems"] == 0 ? <p>Geen werkbonnen</p>: null}
                      {this.props.item.items.data["hydra:totalItems"] > 10 ? 
@@ -75,7 +75,8 @@ class Posts extends Component {
                     : null }
                    
                 </Container>
-                :  <div><Spinner /> </div>
+                :  <Spinner /> }
+                </div>
         )
     }
 }

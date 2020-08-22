@@ -34,7 +34,7 @@ class PostCard extends Component {
         return (
           <div className="col-12">
      
-            <Card className='my-3' >
+            <Card className='my-3' key={this.props.id} >
           
               {this.props.item.loading ? <Spinner /> : 
               <div> 
