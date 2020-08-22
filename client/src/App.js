@@ -7,7 +7,7 @@ import Login from './pages/Login'
 import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/authActions';
-import { getMaterials, getCustomers, getItems} from './actions/itemActions';
+import { getMaterials, getCustomers, getItems, getPeriods} from './actions/itemActions';
 import { ProtectedRoute } from './components/Routes/ProtectedRoute';
 import Detail from './pages/Detail'
 import Clients from './pages/Clients'

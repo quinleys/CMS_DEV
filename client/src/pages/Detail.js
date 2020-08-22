@@ -67,7 +67,7 @@ class Detail extends Component {
             allCustomers: this.props.item.customers,
             loadedcustomers: false,
         })
-       this.props.clearItem()
+      /*  this.props.clearItem() */
     }
     loadCustomers = () => {
         if(this.props.item.materials[0] && this.props.item.customers[0]){

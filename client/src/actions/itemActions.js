@@ -68,12 +68,13 @@ export const loadNextPage = (page) => (dispatch) => {
     })
 };
 export const getItem = id => (dispatch) => {
-    dispatch(setItemsLoading());
 
+    dispatch(setItemsLoading());
     axios.get('https://127.0.0.1:8000/api/posts/' + id, {headers: { Authorization: "Bearer " + localStorage.getItem('token') }})
     .then(res => {
         if(res.data.user.id == localStorage.getItem('id') || localStorage.getItem('userRole') == 'ROLE_ADMIN' ){
-        dispatch({
+        console.log(res.data)
+            dispatch({
             type: GET_ITEM,
             payload: res.data
         })
@@ -135,26 +136,30 @@ export const setPeriodsLoading = () => {
     }
 }
 export const getPeriods = (id) => (dispatch) => {
-    dispatch(setMaterialsLoading());
+  /*   dispatch(setMaterialsLoading()); */
     axios.get('https://127.0.0.1:8000/api/customers/' + id, { headers: { Authorization: "Bearer " + localStorage.getItem('token') }})
     .then(res => {
+       console.log(res.data)
         if(res.data.periods.length >= 1){
             dispatch({
                 type: GET_PERIODS,
                 payload: res.data.periods
             })
         }else{
+            console.log('no periods')
             dispatch({
                 type: GET_PERIODS,
                 payload: 'no periods'
             })
-        }
+        } 
     }).catch(err => {
+        
         dispatch({
             type: FAILED_PERIODS
-        })
+        }) 
     })
 }
+
 export const editItem = (item,id) => (dispatch) => {
     axios.put('https://127.0.0.1:8000/api/posts/' + id, item, { headers: { Authorization: "Bearer " + localStorage.getItem('token')}})
     .then(res => {
