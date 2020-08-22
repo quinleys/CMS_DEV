@@ -202,13 +202,13 @@ class ItemModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                 > 
-                    <ModalHeader toggle={this.toggle}>Voeg taak toe</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Voeg werkbon toe</ModalHeader>
                     <ModalBody>
                         {this.props.error.itemError ? <Alert  severity="error"> {this.props.error.itemError.data['hydra:description']} </Alert> : null }
                         {this.state.errormsg !== '' ? <Alert  severity="error"> {this.state.errormsg} </Alert> : null }
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for="title">Title</Label>
+                                <Label for="title">Titel</Label>
                                 <Input
                                     type="text"
                                     name="title"
@@ -231,7 +231,7 @@ class ItemModal extends Component {
                                     className="mb-2"
                                 />
                                 <FormGroup>
-                                    <Label for="date">Date</Label>
+                                    <Label for="date">Datum</Label>
                                     <Input
                                     type="date"
                                     name="date"

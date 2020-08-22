@@ -270,7 +270,6 @@ class Calender extends Component {
             this.state.data.map(m => {
                 uren = uren + moment(m.calcstart).diff(moment(m.startDate))
                 pauze = pauze + moment(m.pauze).diff(moment(m.zerodate))
-              console.log(m.calcstart)
                 this.setState({
                     hoursworked: this.convertMS(uren),
                     hourspauze: this.convertMS(pauze),
@@ -283,7 +282,6 @@ class Calender extends Component {
       }
 
     convertMS = ( milliseconds )  => {
-      console.log('milliseconds',milliseconds)
         var day = 0, hour = 0, minute = 0, seconds = 0;
         seconds = Math.floor(milliseconds / 1000);
         minute = Math.floor(seconds / 60);
