@@ -175,10 +175,10 @@ class Calender extends Component {
 
                   let calcpauze = new Date (moment(m.date).format('YYYY-MM-DD') + 'T' + m.pauze);
                   let calcStart = new Date(moment(m.date).format('YYYY-MM-DD') + 'T' + m.stop)
-                  let hours = calcStart.setHours(calcStart.getHours() + calcpauze.getHours())
-                 
-                  let minutes = calcStart.setMinutes(calcStart.getMinutes() + calcpauze.getMinutes())
-                  let total = hours + minutes
+                  let hours = calcStart.getHours() + calcpauze.getHours()
+                  let minutes = calcStart.getMinutes() + calcpauze.getMinutes()
+                  let calced = moment(calcStart).diff(moment(calcpauze))
+               
                   let item = {
                     "id" : m.id,
                     "title" : m.title,
@@ -186,7 +186,7 @@ class Calender extends Component {
                     "startDate": moment(m.date).format('YYYY-MM-DD') + 'T' + m.start,
                     "endDate": moment(m.date).format('YYYY-MM-DD') + 'T' + m.stop,
                     "pauze": moment(m.date).format('YYYY-MM-DD') + 'T' + m.pauze,
-                    "calcstart": moment(m.date).format('YYYY-MM-DD') + 'T' + new Date(calcStart).toISOString().slice(11, -1) ,
+                    "calcstart": moment(m.date).format('YYYY-MM-DD') + 'T' + new Date(calced).toISOString().slice(11, -1) ,
                     "period": m.period,
                     'customer' : m.customer,
                   }
@@ -268,9 +268,9 @@ class Calender extends Component {
             let uren = 0
             let pauze = 0
             this.state.data.map(m => {
-                uren = uren + moment(m.endDate).diff(moment(m.calcstart))
+                uren = uren + moment(m.calcstart).diff(moment(m.startDate))
                 pauze = pauze + moment(m.pauze).diff(moment(m.zerodate))
-                
+              console.log(m.calcstart)
                 this.setState({
                     hoursworked: this.convertMS(uren),
                     hourspauze: this.convertMS(pauze),
@@ -283,7 +283,7 @@ class Calender extends Component {
       }
 
     convertMS = ( milliseconds )  => {
-     
+      console.log('milliseconds',milliseconds)
         var day = 0, hour = 0, minute = 0, seconds = 0;
         seconds = Math.floor(milliseconds / 1000);
         minute = Math.floor(seconds / 60);

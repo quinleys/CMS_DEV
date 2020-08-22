@@ -192,6 +192,7 @@ class ItemModal extends Component {
         return (
             loading && customersloading  && materialsloading && this.props.item.customers.length > 0 ? <Spinner /> : 
             
+            this.props.item.customers['hydra:totalItems'] >= 1 ? 
             <div>
                 
   <Fab size="large" color="secondary" aria-label="add" className="fab" onClick={this.toggle} >
@@ -331,6 +332,7 @@ class ItemModal extends Component {
                     </ModalBody>
                 </Modal>
                 </div>
+                : <Spinner/>
             
         )
     }

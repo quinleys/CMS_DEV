@@ -10,6 +10,7 @@ import 'react-tabs/style/react-tabs.css';
 import Alert from '@material-ui/lab/Alert';
 import  { getProfile, updateProfile } from '../actions/authActions';
 import { Redirect } from 'react-router-dom'
+import moment from 'moment'
 class Profile extends Component {
     
     state = {
@@ -128,8 +129,8 @@ class Profile extends Component {
             let uren = 0
             let pauze = 0
             this.state.data.map(m => {
-                let endDate = new Date(m.end);
-                let startDate = new Date (m.calcstart);
+                let startDate = new Date(m.start);
+                let endDate = new Date (m.calcstart);
                 let pauzeDate = new Date (m.pauze);
                 let zeroDate = new Date (m.zerodate)
                 uren = uren + (endDate - startDate)
@@ -169,6 +170,7 @@ class Profile extends Component {
             this.props.item.customerItems['hydra:member'].map(m => {
                 let calcpauze = new Date ( m.date.split('T')[0] + 'T'+ m.pauze);
                 let calcStart = new Date( m.date.split('T')[0] + 'T'+ m.stop)
+                let calced = moment(calcStart).diff(moment(calcpauze))
                 let hours = calcStart.setHours(calcStart.getHours() + calcpauze.getHours())
                 let minutes = calcStart.setMinutes(calcStart.getMinutes() + calcpauze.getMinutes())
               let item = {
@@ -180,7 +182,7 @@ class Profile extends Component {
                 'customer' : m.customer,
                 "zerodate":  m.date.split('T')[0] + 'T'  +'00:00:00',
                 "pauze":  m.date.split('T')[0] + 'T'+ m.pauze,
-                "calcstart":  m.date.split('T')[0] + 'T' + new Date(calcStart).toISOString().slice(11, -1) ,
+                "calcstart":  m.date.split('T')[0] + 'T' + new Date(calced).toISOString().slice(11, -1) ,
               }
               if(this.state.data.includes(item)){
                 this.setState({data: this.state.data.filter(function(m) { 
