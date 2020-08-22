@@ -249,6 +249,7 @@ class Detail extends Component {
                         </Link>
                     <Switch
                     checked={this.state.finished}
+                    disabled
                     onChange={this.onToggle}
                     name="checkedA"
                     inputProps={{ 'aria-label': 'secondary checkbox' }}
