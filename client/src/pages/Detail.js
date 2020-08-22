@@ -231,7 +231,7 @@ class Detail extends Component {
             <Container>
                 { this.props.item.loading && this.state.loading && this.props.item.customersloading && this.props.item.item.id == this.state.id  ? <Spinner toggle={true}/>: 
             console.log(this.props.item.item.id , this.state.id ),
-            this.props.error.notAllowed ? 'NOT ALLOWED' : 
+            this.props.error.notAllowed ? <div className="text-center"> <div className="row"> <div className="col-12">NOT ALLOWED</div></div> <a href="/client" className="btn btn-primary">Ga terug</a></div> : 
              !this.state.loaded && this.state.loading ? <div> {this.setCorrect()} <Spinner toggle={true} /> </div>: 
             <div>
               {this.props.item.item.customers && !this.loadedcustomers && this.state.loading  ? this.loadCustomers() : null}
