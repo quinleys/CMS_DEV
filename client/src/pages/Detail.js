@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Container } from 'reactstrap'
-import { getItem, getCustomers , editItem, getPeriods} from '../actions/itemActions';
+import { getItem, getCustomers , editItem, getPeriods, clearItem} from '../actions/itemActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {  Button, Input, Label, FormGroup } from 'reactstrap';
@@ -22,6 +22,7 @@ class Detail extends Component {
         customer: 0,
         materials: [],
         loaded: false,
+        loading: true,
         start: 0,
         period: 0,
         errormsg: "",
@@ -35,10 +36,14 @@ class Detail extends Component {
         let id = this.props.match.params.id
         var splitstr = id.split(':');
         let final = splitstr.slice(0)
-        this.props.getItem(final[1])
         this.setState({
-            id: final[1]
+            id: final[1],
+            loading: true,
+        }, function(){
+            this.props.getItem(final[1])
         })
+     
+
         
     } 
     componentWillUnmount(){
@@ -52,6 +57,7 @@ class Detail extends Component {
             customer: 0,
             materials: [],
             loaded: false,
+            loading: true,
             start: 0,
             period: 0,
             errormsg: "",
@@ -61,7 +67,7 @@ class Detail extends Component {
             allCustomers: this.props.item.customers,
             loadedcustomers: false,
         })
-       
+       this.props.clearItem()
     }
     loadCustomers = () => {
         if(this.props.item.materials[0] && this.props.item.customers[0]){
@@ -109,7 +115,7 @@ class Detail extends Component {
             finished: this.props.item.item.finished,
             customer: this.props.item.item.customer.id,
             pauze: this.props.item.item.pauze,
-            
+            loading: false,
         }, function(){
             if(this.props.item.item.period){
                 this.setState({
@@ -223,11 +229,12 @@ class Detail extends Component {
         return (
             this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
             <Container>
-                {this.props.item.loading  && this.props.item.customersloading && this.props.item.item.id == this.state.id  ? <Spinner/>: 
-             this.props.error.notAllowed ? 'NOT ALLOWED' : 
-             !this.state.loaded? <div> {this.setCorrect()} <Spinner/> </div>: 
+                { this.props.item.loading && this.state.loading && this.props.item.customersloading && this.props.item.item.id == this.state.id  ? <Spinner/>: 
+            console.log(this.props.item.item.id , this.state.id ),
+            this.props.error.notAllowed ? 'NOT ALLOWED' : 
+             !this.state.loaded && this.state.loading ? <div> {this.setCorrect()} <Spinner/> </div>: 
             <div>
-              {this.props.item.item.customers && !this.loadedcustomers  ? this.loadCustomers() : null}
+              {this.props.item.item.customers && !this.loadedcustomers && this.state.loading  ? this.loadCustomers() : null}
               <Card className="p-3 my-3" style={{ color: "white"}}>
               {this.props.error.itemError ? <Alert  severity="error"> {this.props.error.itemError.data['hydra:description']} </Alert> : null }
                 {this.state.errormsg !== '' ? <Alert  severity="error"> {this.state.errormsg} </Alert> : null }
@@ -344,7 +351,7 @@ class Detail extends Component {
                                     {this.state.period == 0 ? <option value="">Kies een periode</option> : null}
                                   { !this.props.item.periodsloading && this.props.item.periods.length >= 1 && this.props.item.periods !== 'no periods' ? this.props.item.periods.map(item => {
                                     return(<option key={item.id} value={item.id} >{item.title}</option>)
-                                }) : <option>Selecteer een klant...</option> }  
+                                }) :   this.props.item.periods == 'no periods' ? <option>Geen periodes</option> : <option>Selecteer een klant...</option>}  
                                 </Input>
                                <Label for="materials">Benodigdheden</Label>
                                
@@ -376,4 +383,4 @@ const mapStateToProps = (state) => ({
     getItem: PropTypes.func.isRequired,
     edit:PropTypes.func.isRequired
 })
-export default connect(mapStateToProps, { getItem ,editItem,getPeriods, getCustomers}) (Detail);
+export default connect(mapStateToProps, {clearItem, getItem ,editItem,getPeriods, getCustomers}) (Detail);

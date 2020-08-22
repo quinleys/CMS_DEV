@@ -1,4 +1,4 @@
-import {  ADD_ITEM, GET_PERIODS, SUCCESS, GET_CUSTOMER_ITEMS, PERIODS_LOADING,FAILED_PERIODS, ITEMS_LOADING,GET_ITEM,CLEAR_ADDED,GET_ITEMS_DATE,CALENDAR_LOADING, MATERIALS_LOADING, GET_MATERIALS, GET_CUSTOMERS, FAILED_ITEMS, CUSTOMERS_LOADING, GET_ITEMS} from './types'
+import {  ADD_ITEM, GET_PERIODS, SUCCESS,CLEAR_ITEM, GET_CUSTOMER_ITEMS, PERIODS_LOADING,FAILED_PERIODS, ITEMS_LOADING,GET_ITEM,CLEAR_ADDED,GET_ITEMS_DATE,CALENDAR_LOADING, MATERIALS_LOADING, GET_MATERIALS, GET_CUSTOMERS, FAILED_ITEMS, CUSTOMERS_LOADING, GET_ITEMS} from './types'
 import axios from 'axios';
 import { returnErrors, notAllowed, notFound, returnItemError, failedUpdate, redirectToLogin } from './errorActions';
 import { logout } from './authActions';
@@ -24,7 +24,12 @@ export const getItems = () => (dispatch) => {
     })
 }
 };
-
+export const clearItem = () => (dispatch) => {
+    dispatch(setItemsLoading());
+    dispatch ({
+        type: CLEAR_ITEM
+    })
+}
 export const getCustomerItems = (customer) => (dispatch) => {
     
     dispatch(setItemsLoading());

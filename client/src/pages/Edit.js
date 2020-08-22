@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Container } from 'reactstrap'
-import { getItem, getCustomers , editItem, getPeriods} from '../actions/itemActions';
+import { getItem, getCustomers , editItem, getPeriods, clearItem} from '../actions/itemActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {  Button, Form, Input, Label, FormGroup } from 'reactstrap';
@@ -22,6 +22,7 @@ class Edit extends Component {
         customer: 0,
         materials: [],
         loaded: false,
+        loading: true,
         start: 0,
         period: 0,
         errormsg: "",
@@ -35,13 +36,63 @@ class Edit extends Component {
         let id = this.props.match.params.id
         var splitstr = id.split(':');
         let final = splitstr.slice(0)
-        this.props.getItem(final[1])
         this.setState({
-            id: final[1]
+            id: final[1],
+            loading: true,
+        }, function(){
+            this.props.getItem(final[1])
         })
         
     } 
-
+    componentWillUnmount(){
+        this.setState({
+            modal: false,
+            title: '',
+            description: '',
+            finished: false,
+            transport: 0,
+            pauze: 0,
+            customer: 0,
+            materials: [],
+            loaded: false,
+            loading: true,
+            start: 0,
+            period: 0,
+            errormsg: "",
+            stop: 10,
+            date: '2020-08-08',
+            allMaterials: this.props.item.materials,
+            allCustomers: this.props.item.customers,
+            loadedcustomers: false,
+        })
+        this.props.clearItem()
+    }
+    onChangeTime = e => {
+        
+        let value = e.target.value
+        let name = e.target.name
+        if(name == 'start'){
+            if(value > this.state.stop){
+                this.setState({
+                    errormsg: 'Start tijd moet vroeger zijn dan stop tijd!'
+                })
+            }else{
+                this.setState({
+                    [name]: value
+                })
+            }
+        }else  if(name == 'stop'){
+            if(value < this.state.start){
+                this.setState({
+                    errormsg: 'Stop tijd moet later zijn dan start tijd!'
+                })
+            }else{
+                this.setState({
+                    [name]: value
+                })
+            }
+        }
+    }
     loadCustomers = () => {
         if(this.props.item.materials[0] && this.props.item.customers[0]){
             this.setState({
@@ -78,6 +129,7 @@ class Edit extends Component {
     }
     setCorrect = () => {
         if(this.props.item.item["@type"] == "Post"){
+            console.log(this.props.item.item.customer.id)
         this.setState({
             title: this.props.item.item.title,
             description: this.props.item.item.description,
@@ -111,10 +163,14 @@ class Edit extends Component {
                     }
                 })
             }
-            this.props.getPeriods(this.props.item.item.customer.id)
-            this.setState({
-                loaded: true
-            })
+            this.props.getPeriods(this.state.customer)
+            if(this.state.materials.length >=1){
+                this.setState({
+                    loaded: true,
+                    loading: false
+                })
+            }
+        
         })
 
     }
@@ -218,9 +274,9 @@ class Edit extends Component {
         return (
             this.props.auth.isAuthenticated == false ? <Redirect to ="/login" /> :
             <Container>
-                {this.props.item.loading  && this.props.item.customersloading && this.props.item.item.materials ? <Spinner/>: 
+                {this.props.item.loading  && this.state.loading &&  this.props.item.customersloading && this.props.item.item.materials ? <Spinner/> : 
              this.props.error.notAllowed ? 'NOT ALLOWED' : 
-             !this.state.loaded? <div> {this.setCorrect()} <Spinner/> </div>: 
+             !this.state.loaded  && this.state.loading? <div> {this.setCorrect()} <Spinner/> </div>: 
             <div>
               {this.props.item.item.customers && !this.loadedcustomers  ? this.loadCustomers() : null}
               <Card className="p-3 my-3" style={{ color: "white"}}>
@@ -281,7 +337,8 @@ class Edit extends Component {
                                     type="time"
                                     name="start"
                                     value={this.state.start}
-                                    onChange={this.onChange}
+                                    onChange={this.onChangeTime}
+                                    max={this.state.stop}
                                     required
                                     id="start"
                                     placeholder="time placeholder"
@@ -293,7 +350,8 @@ class Edit extends Component {
                                     type="time"
                                     name="stop"
                                     value={this.state.stop}
-                                    onChange={this.onChange}
+                                    onChange={this.onChangeTime}
+                                    min={this.state.start}
                                     required
                                     id="stop"
                                     placeholder="time placeholder"
@@ -330,11 +388,11 @@ class Edit extends Component {
                                 }) : <option>Loading...</option> }  
                                 </Input>
                                 <Label for="period">Periode</Label>
-                                <Input type="select" disabled={this.state.customer == ""} name="period" id="period" value={this.state.period} className="mb-2" onChange={this.onChange}>
+                                <Input type="select" disabled={this.state.customer == "" || this.props.item.periods == 'no periods'} name="period" id="period" value={this.state.period} className="mb-2" onChange={this.onChange}>
                                     {this.state.period == 0 ? <option value="">Kies een periode</option> : null}
                                   { !this.props.item.periodsloading && this.props.item.periods.length >= 1 && this.props.item.periods !== 'no periods' ? this.props.item.periods.map(item => {
                                     return(<option key={item.id} value={item.id} >{item.title}</option>)
-                                }) : <option>Selecteer een klant...</option> }  
+                                }) :  this.props.item.periods == 'no periods' ? <option>Geen periodes</option> : <option>Selecteer een klant...</option> }  
                                 </Input>
                                <Label for="materials">Benodigdheden</Label>
                             
@@ -381,4 +439,4 @@ const mapStateToProps = (state) => ({
     getItem: PropTypes.func.isRequired,
     edit:PropTypes.func.isRequired
 })
-export default connect(mapStateToProps, { getItem ,editItem,getPeriods, getCustomers}) (Edit);
+export default connect(mapStateToProps, {clearItem, getItem ,editItem,getPeriods, getCustomers}) (Edit);

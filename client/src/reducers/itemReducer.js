@@ -1,4 +1,4 @@
-import { GET_ITEMS,FAILED_PERIODS,CUSTOMERS_LOADING, GET_CUSTOMER_ITEMS, GET_PERIODS, PERIODS_LOADING, CLEAR_ADDED,MATERIALS_LOADING, ADD_ITEM, GET_ITEM, ITEMS_LOADING, GET_CUSTOMERS, GET_MATERIALS, FAILED_ITEMS, CALENDAR_LOADING, GET_ITEMS_DATE } from '../actions/types'
+import { GET_ITEMS,FAILED_PERIODS,CLEAR_ITEM,CUSTOMERS_LOADING, GET_CUSTOMER_ITEMS, GET_PERIODS, PERIODS_LOADING, CLEAR_ADDED,MATERIALS_LOADING, ADD_ITEM, GET_ITEM, ITEMS_LOADING, GET_CUSTOMERS, GET_MATERIALS, FAILED_ITEMS, CALENDAR_LOADING, GET_ITEMS_DATE } from '../actions/types'
 
 
 const initialState = {
@@ -27,6 +27,12 @@ export default function(state = initialState, action){
                 addedSucces: false,
                 loading: false,
             };
+        case CLEAR_ITEM: 
+            return{
+                ...state,
+                item: [],
+                loading: false
+            }
         case ADD_ITEM:
             return {
                 ...state,

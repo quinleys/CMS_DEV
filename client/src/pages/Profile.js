@@ -299,9 +299,9 @@ class Profile extends Component {
             { this.state.hoursworked !== null  ? this.state.customer !== "" ?
             <div>
             <h6>Aantal taken:</h6> <p>{this.props.item.customerItems['hydra:totalItems'] }</p>
-            <h6> Werkdagen: </h6> <p> {this.state.hoursworked.day} Dagen {this.state.hoursworked.hour} Uren {this.state.hoursworked.minute} Minuten {this.state.hoursworked.seconds} Seconds </p>
+                            <h6> Werkdagen: </h6>  {this.state.hoursworked == 0 ? 'Nog geen werkdagen' : <p> {this.state.hoursworked.day} Dagen {this.state.hoursworked.hour} Uren {this.state.hoursworked.minute} Minuten {this.state.hoursworked.seconds} Seconds </p> }
             
-           <h6>Pauze :</h6> <p>{this.state.hourspauze.day} Dagen {this.state.hourspauze.hour} Uren {this.state.hourspauze.minute} Minuten {this.state.hourspauze.seconds} Seconds</p>
+           <h6>Pauze :</h6> {this.state.hourspauze == 0 ? 'Geen pauze genomen' :  <p>{this.state.hourspauze.day} Dagen {this.state.hourspauze.hour} Uren {this.state.hourspauze.minute} Minuten {this.state.hourspauze.seconds} Seconds</p> }
             </div>
                 : "0" : null }
             </CardBody>

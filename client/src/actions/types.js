@@ -48,3 +48,5 @@ export const CLIENT_LOADING = "CLIENT_LOADING"
 export const LOAD_USER_FAIL = "LOAD_USER_FAIL"
 
 export const GET_CUSTOMER_ITEMS = "GET_CUSTOMER_ITEMS"
+
+export const CLEAR_ITEM = "CLEAR_ITEM"
